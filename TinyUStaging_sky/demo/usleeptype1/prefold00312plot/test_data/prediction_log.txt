@@ -1,0 +1,1264 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'predict.py'
+Args dump: 
+{'folder_regex': None, 'project_dir': './', 'data_per_prediction': None, 'channels': None, 'majority': True, 'data_split': 'test_data', 'out_dir': 'prefold00312plot', 'num_GPUs': 1, 'strip_func': 'strip_to_match', 'num_test_time_augment': 0, 'one_shot': False, 'save_true': True, 'overwrite': True, 'force_GPU': '', 'no_argmax': False, 'weights_file_name': 'fold_0_@epoch_16_val_loss_0.88310.h5', 'continue_': False, 'plot_majority': True, 'plot_format': 'png'}
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'hparams.py'
+YAML path:    /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'init_model' in 'model_init.py'
+Creating new model of type 'UStaging4'
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'ustaging4.py'
+************ sky --- ratio_se:[1, 8, 4, 1] ************ 
+************ sky --- ratio_cbam:None ************ 
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_upsample' in 'ustaging4.py'
+sky--- [Decoder(Upsample)] - cls.get_shape().as_list():  [None, 62, 1, 362]
+Attention (2) - Bottom: SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [create_dense_modeling(1*1 Conv)] - in_.get_shape().as_list():  [None, 119040, 1, 22]
+Attention (3) - Dense (after 1*1 Conv): SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [dense(1*1 Conv)] - cls.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv) (cropped)] - ❤ out.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv)] - in_reshaped.get_shape().as_list():  [None, 119040, 1, 2]
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'ustaging4.py'
+UStaging4 Model Summary
+-------------------
+N periods:         31
+Input dims:        3840
+N channels:        2
+N classes:         5
+Kernel size:       5
+Dilation rate:     ListWrapper([ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2])])
+CF factor:         2.000
+Init filters:      16
+Depth:             4
+Poolings:          ListWrapper([10, 8, 6, 4])
+Transition window  1
+Dense activation   tanh
+l2 reg:            None
+Padding:           same
+Conv activation:   elu
+Receptive field:   33307
+Seq length.:       119040
+N params:          2404763
+Input:             KerasTensor(type_spec=TensorSpec(shape=(None, 31, 3840, 2), dtype=tf.float32, name='input_1'), name='input_1', description="created by layer 'input_1'")
+Output:            KerasTensor(type_spec=TensorSpec(shape=(None, 31, 5), dtype=tf.float32, name=None), name='sequence_classification_reshaped/Reshape:0', description="created by layer 'sequence_classification_reshaped'")
+--------------------------------------------------------------------------------
+>>> Logged by: 'load_from_file' in 'model_init.py'
+Loading parameters from:
+/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/model/fold_0_@epoch_16_val_loss_0.88310.h5
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/TEST] SleepStudyDataset(identifier: dcsm/TEST, N pairs: 26, N loaded: 0)
+[Dataset: dcsm/TEST] Setting sample rate of 128 Hz
+[Dataset: dcsm/TEST] Setting 'strip_to_match' strip function with parameters {}...
+[Dataset: dcsm/TEST] Setting 'clip_noisy_values' quality control function with parameters {'min_max_times_global_iqr': 20}...
+[Dataset: dcsm/TEST] Setting misc dictionary: {'channel_groups': [['ECG'], ['ABD', 'THO']]}
+[Dataset: dcsm/TEST] Setting 'RobustScaler' scaler...
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'predict.py'
+[*] Running eval on dataset SleepStudyDataset(identifier: dcsm/TEST, N pairs: 26, N loaded: 0)
+    Out dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+
+PREDICTING ON 26 STUDIES
+[1/26] Predicting on SleepStudy: tp811a53e0_76e3_4b99_b7be_23caabba9e34
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] sleep_study_pair.n_channels = 2
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] raw pred.shape=(2880, 5), y.shape=(2880, 1), org_pred_shape=(2880, 5)
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] pred mean per class = [13.631072059357798, 3.6556181160694297, 5.009993130320476, 4.355420259408291, 4.024979767967792]
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] pred first row = [0.6206632256507874, 0.07484319806098938, 0.1394343376159668, 0.07349257171154022, 0.09156669676303864]
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] argmax counts BEFORE postprocess = {0: 1738, 1: 12, 2: 494, 3: 355, 4: 281}
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] true counts = {0: 1831, 1: 208, 2: 88, 3: 558, 4: 195}
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] argmax counts AFTER postprocess = {0: 1738, 1: 12, 2: 494, 3: 355, 4: 281}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2880,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp811a53e0_76e3_4b99_b7be_23caabba9e34_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] channels_to_load = ('ECG', 'THO')
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] sleep_study_pair.n_channels = 2
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] raw pred.shape=(2880, 5), y.shape=(2880, 1), org_pred_shape=(2880, 5)
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] pred mean per class = [12.275171850904977, 4.052890834885572, 3.9959130676877166, 4.862409771619261, 5.490697813332857]
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] pred first row = [0.45290863513946533, 0.11692629009485245, 0.2441619634628296, 0.10321679711341858, 0.08278633654117584]
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] argmax counts BEFORE postprocess = {0: 1497, 1: 36, 2: 232, 3: 492, 4: 623}
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] true counts = {0: 1831, 1: 208, 2: 88, 3: 558, 4: 195}
+DEBUG [tp811a53e0_76e3_4b99_b7be_23caabba9e34] argmax counts AFTER postprocess = {0: 1497, 1: 36, 2: 232, 3: 492, 4: 623}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2880,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp811a53e0_76e3_4b99_b7be_23caabba9e34_PRED.npy
+* Saving array of shape (2880,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp811a53e0_76e3_4b99_b7be_23caabba9e34_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp811a53e0_76e3_4b99_b7be_23caabba9e34_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp811a53e0_76e3_4b99_b7be_23caabba9e34_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[2/26] Predicting on SleepStudy: tp5848ca18_25da_4cdd_b92a_b05ae10d921a
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] sleep_study_pair.n_channels = 2
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] raw pred.shape=(2391, 5), y.shape=(2391, 1), org_pred_shape=(2391, 5)
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] pred mean per class = [8.15782580777554, 5.428317807627268, 5.434213853951829, 5.7318042356416505, 5.858879695535454]
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] pred first row = [0.24373140931129456, 0.1938500702381134, 0.27024519443511963, 0.17485980689525604, 0.11731355637311935]
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] argmax counts BEFORE postprocess = {0: 844, 1: 236, 2: 446, 3: 297, 4: 568}
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] true counts = {0: 1468, 1: 165, 2: 48, 3: 472, 4: 238}
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] argmax counts AFTER postprocess = {0: 844, 1: 236, 2: 446, 3: 297, 4: 568}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2391,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp5848ca18_25da_4cdd_b92a_b05ae10d921a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] channels_to_load = ('ECG', 'THO')
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] sleep_study_pair.n_channels = 2
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] raw pred.shape=(2391, 5), y.shape=(2391, 1), org_pred_shape=(2391, 5)
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] pred mean per class = [10.086101410320767, 4.7731681314948675, 5.581758708604668, 5.197207209067158, 4.972805939314069]
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] pred first row = [0.2722454369068146, 0.1837100386619568, 0.27015334367752075, 0.16282594203948975, 0.11106520891189575]
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] argmax counts BEFORE postprocess = {0: 1101, 1: 141, 2: 417, 3: 326, 4: 406}
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] true counts = {0: 1468, 1: 165, 2: 48, 3: 472, 4: 238}
+DEBUG [tp5848ca18_25da_4cdd_b92a_b05ae10d921a] argmax counts AFTER postprocess = {0: 1101, 1: 141, 2: 417, 3: 326, 4: 406}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2391,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp5848ca18_25da_4cdd_b92a_b05ae10d921a_PRED.npy
+* Saving array of shape (2391,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp5848ca18_25da_4cdd_b92a_b05ae10d921a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp5848ca18_25da_4cdd_b92a_b05ae10d921a_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp5848ca18_25da_4cdd_b92a_b05ae10d921a_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[3/26] Predicting on SleepStudy: tp40b324a7_2080_4f21_b530_6a5b0962c6eb
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] sleep_study_pair.n_channels = 2
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] raw pred.shape=(2364, 5), y.shape=(2364, 1), org_pred_shape=(2364, 5)
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] pred mean per class = [13.641334629070814, 3.9993341207124495, 5.328112428815635, 3.8013507561275954, 3.8364670537033962]
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] pred first row = [0.46905648708343506, 0.11069994419813156, 0.2462608814239502, 0.09638174623250961, 0.07760098576545715]
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] argmax counts BEFORE postprocess = {0: 1564, 1: 231, 2: 251, 3: 70, 4: 248}
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] true counts = {0: 1565, 1: 106, 2: 36, 3: 376, 4: 281}
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] argmax counts AFTER postprocess = {0: 1564, 1: 231, 2: 251, 3: 70, 4: 248}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2364,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp40b324a7_2080_4f21_b530_6a5b0962c6eb_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] channels_to_load = ('ECG', 'THO')
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] sleep_study_pair.n_channels = 2
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] raw pred.shape=(2364, 5), y.shape=(2364, 1), org_pred_shape=(2364, 5)
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] pred mean per class = [13.422094443545074, 4.193643830235191, 5.352542103826054, 3.8740017929866077, 3.764316811621845]
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] pred first row = [0.3387453258037567, 0.15110845863819122, 0.29346764087677, 0.13055621087551117, 0.08612225949764252]
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] argmax counts BEFORE postprocess = {0: 1523, 1: 285, 2: 278, 3: 78, 4: 200}
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] true counts = {0: 1565, 1: 106, 2: 36, 3: 376, 4: 281}
+DEBUG [tp40b324a7_2080_4f21_b530_6a5b0962c6eb] argmax counts AFTER postprocess = {0: 1523, 1: 285, 2: 278, 3: 78, 4: 200}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2364,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp40b324a7_2080_4f21_b530_6a5b0962c6eb_PRED.npy
+* Saving array of shape (2364,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp40b324a7_2080_4f21_b530_6a5b0962c6eb_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp40b324a7_2080_4f21_b530_6a5b0962c6eb_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp40b324a7_2080_4f21_b530_6a5b0962c6eb_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[4/26] Predicting on SleepStudy: tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] sleep_study_pair.n_channels = 2
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] raw pred.shape=(2219, 5), y.shape=(2219, 1), org_pred_shape=(2219, 5)
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] pred mean per class = [16.507401463356995, 3.1020071835976064, 2.9865363625278207, 3.186131189103436, 4.798816091192567]
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] pred first row = [0.5589407682418823, 0.09552700072526932, 0.12965315580368042, 0.08839874714612961, 0.12748031318187714]
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] argmax counts BEFORE postprocess = {0: 1627, 1: 51, 2: 55, 3: 15, 4: 471}
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] true counts = {0: 1469, 1: 119, 2: 2, 3: 210, 4: 419}
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] argmax counts AFTER postprocess = {0: 1627, 1: 51, 2: 55, 3: 15, 4: 471}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2219,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] channels_to_load = ('ECG', 'THO')
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] sleep_study_pair.n_channels = 2
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] raw pred.shape=(2219, 5), y.shape=(2219, 1), org_pred_shape=(2219, 5)
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] pred mean per class = [15.777633724542802, 3.4796610368728813, 3.449979225283555, 3.424069231116675, 4.449549083138383]
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] pred first row = [0.30748605728149414, 0.1867072731256485, 0.18272005021572113, 0.1422864943742752, 0.18080012500286102]
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] argmax counts BEFORE postprocess = {0: 1590, 1: 208, 2: 64, 3: 28, 4: 329}
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] true counts = {0: 1469, 1: 119, 2: 2, 3: 210, 4: 419}
+DEBUG [tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b] argmax counts AFTER postprocess = {0: 1590, 1: 208, 2: 64, 3: 28, 4: 329}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2219,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b_PRED.npy
+* Saving array of shape (2219,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp31410e0b_283b_44bd_8ad1_56e9ed07cb0b_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[5/26] Predicting on SleepStudy: tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] sleep_study_pair.n_channels = 2
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] raw pred.shape=(1925, 5), y.shape=(1925, 1), org_pred_shape=(1925, 5)
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] pred mean per class = [10.355182762498206, 4.981312549569971, 7.112202614145232, 4.716397746872979, 3.3517874380539765]
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] pred first row = [0.2576155960559845, 0.19954781234264374, 0.2188362032175064, 0.17388345301151276, 0.15011687576770782]
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] argmax counts BEFORE postprocess = {0: 887, 1: 210, 2: 726, 3: 81, 4: 21}
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] true counts = {0: 1041, 1: 99, 2: 65, 3: 614, 4: 106}
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] argmax counts AFTER postprocess = {0: 887, 1: 210, 2: 726, 3: 81, 4: 21}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1925,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] channels_to_load = ('ECG', 'THO')
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] sleep_study_pair.n_channels = 2
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] raw pred.shape=(1925, 5), y.shape=(1925, 1), org_pred_shape=(1925, 5)
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] pred mean per class = [6.998265546798319, 6.374509899627853, 6.834858494689326, 5.918425275232498, 4.390823898334782]
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] pred first row = [0.23859868943691254, 0.20407769083976746, 0.23346249759197235, 0.18426236510276794, 0.1395987719297409]
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] argmax counts BEFORE postprocess = {0: 546, 1: 474, 2: 683, 3: 123, 4: 99}
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] true counts = {0: 1041, 1: 99, 2: 65, 3: 614, 4: 106}
+DEBUG [tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468] argmax counts AFTER postprocess = {0: 546, 1: 474, 2: 683, 3: 123, 4: 99}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1925,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468_PRED.npy
+* Saving array of shape (1925,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp1f1d9f7a_c187_4c0e_ad8e_fbe2dee73468_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[6/26] Predicting on SleepStudy: tp52580087_124e_49e4_aa3f_0d4f5a5e3e00
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] sleep_study_pair.n_channels = 2
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] raw pred.shape=(2399, 5), y.shape=(2399, 1), org_pred_shape=(2399, 5)
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] pred mean per class = [12.713896960771645, 4.247128793732941, 4.742323556918808, 4.479654423178187, 4.429334745991225]
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] pred first row = [0.5342167019844055, 0.09196349233388901, 0.20395049452781677, 0.09009687602519989, 0.07977250963449478]
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] argmax counts BEFORE postprocess = {0: 1411, 1: 212, 2: 211, 3: 257, 4: 308}
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] true counts = {0: 1530, 1: 210, 2: 85, 3: 378, 4: 196}
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] argmax counts AFTER postprocess = {0: 1411, 1: 212, 2: 211, 3: 257, 4: 308}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2399,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp52580087_124e_49e4_aa3f_0d4f5a5e3e00_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] channels_to_load = ('ECG', 'THO')
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] sleep_study_pair.n_channels = 2
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] raw pred.shape=(2399, 5), y.shape=(2399, 1), org_pred_shape=(2399, 5)
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] pred mean per class = [11.968695895118222, 4.516192439428782, 4.393743968911534, 4.667140958441725, 5.066565205303082]
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] pred first row = [0.5441508889198303, 0.08676478266716003, 0.13009588420391083, 0.1078697219491005, 0.13111872971057892]
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] argmax counts BEFORE postprocess = {0: 1367, 1: 264, 2: 151, 3: 212, 4: 405}
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] true counts = {0: 1530, 1: 210, 2: 85, 3: 378, 4: 196}
+DEBUG [tp52580087_124e_49e4_aa3f_0d4f5a5e3e00] argmax counts AFTER postprocess = {0: 1367, 1: 264, 2: 151, 3: 212, 4: 405}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2399,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp52580087_124e_49e4_aa3f_0d4f5a5e3e00_PRED.npy
+* Saving array of shape (2399,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp52580087_124e_49e4_aa3f_0d4f5a5e3e00_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp52580087_124e_49e4_aa3f_0d4f5a5e3e00_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp52580087_124e_49e4_aa3f_0d4f5a5e3e00_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[7/26] Predicting on SleepStudy: tp66a102ed_b341_4a9c_962e_276155fe6bd9
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] sleep_study_pair.n_channels = 2
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] raw pred.shape=(2137, 5), y.shape=(2137, 1), org_pred_shape=(2137, 5)
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] pred mean per class = [12.479204081497462, 5.07075859487116, 4.215794751057153, 3.968411836860319, 4.830641217437383]
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] pred first row = [0.6486395597457886, 0.06904567033052444, 0.09980671852827072, 0.06930983811616898, 0.11319828033447266]
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] argmax counts BEFORE postprocess = {0: 1195, 1: 579, 2: 182, 3: 9, 4: 172}
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] true counts = {0: 1326, 1: 154, 2: 101, 3: 388, 4: 168}
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] argmax counts AFTER postprocess = {0: 1195, 1: 579, 2: 182, 3: 9, 4: 172}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp66a102ed_b341_4a9c_962e_276155fe6bd9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] channels_to_load = ('ECG', 'THO')
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] sleep_study_pair.n_channels = 2
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] raw pred.shape=(2137, 5), y.shape=(2137, 1), org_pred_shape=(2137, 5)
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] pred mean per class = [12.301217144258429, 4.864490493405113, 4.700618178626827, 4.169995978845926, 4.528488682913317]
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] pred first row = [0.7268807888031006, 0.04796268418431282, 0.07997597008943558, 0.053179796785116196, 0.09200072288513184]
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] argmax counts BEFORE postprocess = {0: 1162, 1: 454, 2: 283, 3: 58, 4: 180}
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] true counts = {0: 1326, 1: 154, 2: 101, 3: 388, 4: 168}
+DEBUG [tp66a102ed_b341_4a9c_962e_276155fe6bd9] argmax counts AFTER postprocess = {0: 1162, 1: 454, 2: 283, 3: 58, 4: 180}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp66a102ed_b341_4a9c_962e_276155fe6bd9_PRED.npy
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp66a102ed_b341_4a9c_962e_276155fe6bd9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp66a102ed_b341_4a9c_962e_276155fe6bd9_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp66a102ed_b341_4a9c_962e_276155fe6bd9_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[8/26] Predicting on SleepStudy: tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] sleep_study_pair.n_channels = 2
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] raw pred.shape=(2147, 5), y.shape=(2147, 1), org_pred_shape=(2147, 5)
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] pred mean per class = [11.409470511511017, 4.801185851655536, 6.144426697282998, 4.764720864682474, 3.447033516651442]
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] pred first row = [0.5428398251533508, 0.09184471517801285, 0.18979144096374512, 0.08908890932798386, 0.08643511682748795]
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] argmax counts BEFORE postprocess = {0: 1027, 1: 369, 2: 493, 3: 239, 4: 19}
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] true counts = {0: 1266, 1: 199, 2: 58, 3: 411, 4: 213}
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] argmax counts AFTER postprocess = {0: 1027, 1: 369, 2: 493, 3: 239, 4: 19}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2147,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] channels_to_load = ('ECG', 'THO')
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] sleep_study_pair.n_channels = 2
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] raw pred.shape=(2147, 5), y.shape=(2147, 1), org_pred_shape=(2147, 5)
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] pred mean per class = [11.50754595426283, 4.717960893016432, 6.3341874173288435, 4.7188219734084536, 3.2883212030902125]
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] pred first row = [0.5455424785614014, 0.0937463641166687, 0.1715538501739502, 0.09119635820388794, 0.09796088933944702]
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] argmax counts BEFORE postprocess = {0: 1052, 1: 245, 2: 581, 3: 249, 4: 20}
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] true counts = {0: 1266, 1: 199, 2: 58, 3: 411, 4: 213}
+DEBUG [tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f] argmax counts AFTER postprocess = {0: 1052, 1: 245, 2: 581, 3: 249, 4: 20}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2147,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f_PRED.npy
+* Saving array of shape (2147,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp1c66939c_7ccd_48ac_9d1e_cd11c2a5d53f_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[9/26] Predicting on SleepStudy: tp67fe00c2_69e5_409a_8b39_09386dad96b7
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] sleep_study_pair.n_channels = 2
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] raw pred.shape=(2386, 5), y.shape=(2386, 1), org_pred_shape=(2386, 5)
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] pred mean per class = [14.05622796463247, 4.134027786196146, 5.505219823231941, 3.6045766026671577, 3.310174147304138]
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] pred first row = [0.45245909690856934, 0.1336498260498047, 0.17694096267223358, 0.10726729035377502, 0.12968289852142334]
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] argmax counts BEFORE postprocess = {0: 1616, 1: 373, 2: 304, 3: 62, 4: 31}
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] true counts = {0: 1857, 1: 54, 2: 76, 3: 364, 4: 35}
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] argmax counts AFTER postprocess = {0: 1616, 1: 373, 2: 304, 3: 62, 4: 31}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2386, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp67fe00c2_69e5_409a_8b39_09386dad96b7_TRUE.npy
+* Saving array of shape (2386,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp67fe00c2_69e5_409a_8b39_09386dad96b7_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] channels_to_load = ('ECG', 'THO')
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] sleep_study_pair.n_channels = 2
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] raw pred.shape=(2386, 5), y.shape=(2386, 1), org_pred_shape=(2386, 5)
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] pred mean per class = [12.305181255187817, 4.840189190169254, 5.548128821132182, 3.973335326333083, 3.943391720768242]
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] pred first row = [0.14944221079349518, 0.2463713139295578, 0.23220863938331604, 0.21086883544921875, 0.16110892593860626]
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] argmax counts BEFORE postprocess = {0: 1503, 1: 534, 2: 246, 3: 8, 4: 95}
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] true counts = {0: 1857, 1: 54, 2: 76, 3: 364, 4: 35}
+DEBUG [tp67fe00c2_69e5_409a_8b39_09386dad96b7] argmax counts AFTER postprocess = {0: 1503, 1: 534, 2: 246, 3: 8, 4: 95}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2386,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp67fe00c2_69e5_409a_8b39_09386dad96b7_PRED.npy
+* Saving array of shape (2386,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp67fe00c2_69e5_409a_8b39_09386dad96b7_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp67fe00c2_69e5_409a_8b39_09386dad96b7_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp67fe00c2_69e5_409a_8b39_09386dad96b7_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[10/26] Predicting on SleepStudy: tp00c5869f_db8e_4b13_8c20_1a77b1bdc261
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] sleep_study_pair.n_channels = 2
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] raw pred.shape=(2204, 5), y.shape=(2204, 1), org_pred_shape=(2204, 5)
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] pred mean per class = [9.272318452738645, 4.905941169893204, 7.150755479203338, 4.831128973294111, 4.417895862428698]
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] pred first row = [0.3112313449382782, 0.17332550883293152, 0.22148141264915466, 0.15528230369091034, 0.1386794149875641]
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] argmax counts BEFORE postprocess = {0: 960, 1: 73, 2: 669, 3: 119, 4: 383}
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] true counts = {0: 1565, 1: 142, 2: 38, 3: 173, 4: 286}
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] argmax counts AFTER postprocess = {0: 960, 1: 73, 2: 669, 3: 119, 4: 383}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2204, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_TRUE.npy
+* Saving array of shape (2204,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] channels_to_load = ('ECG', 'THO')
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] sleep_study_pair.n_channels = 2
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] raw pred.shape=(2204, 5), y.shape=(2204, 1), org_pred_shape=(2204, 5)
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] pred mean per class = [7.851543452370973, 5.394796426894782, 7.589609145349105, 5.391133127752657, 4.350957774455758]
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] pred first row = [0.19533443450927734, 0.23147404193878174, 0.2388732135295868, 0.18836066126823425, 0.1459575891494751]
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] argmax counts BEFORE postprocess = {0: 712, 1: 108, 2: 877, 3: 153, 4: 354}
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] true counts = {0: 1565, 1: 142, 2: 38, 3: 173, 4: 286}
+DEBUG [tp00c5869f_db8e_4b13_8c20_1a77b1bdc261] argmax counts AFTER postprocess = {0: 712, 1: 108, 2: 877, 3: 153, 4: 354}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2204,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_PRED.npy
+* Saving array of shape (2204,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp00c5869f_db8e_4b13_8c20_1a77b1bdc261_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[11/26] Predicting on SleepStudy: tp7e271aa6_7e17_44c6_ba7b_98647be1cda4
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] sleep_study_pair.n_channels = 2
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] raw pred.shape=(2291, 5), y.shape=(2291, 1), org_pred_shape=(2291, 5)
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] pred mean per class = [12.83318857820676, 4.1463937006617595, 4.2467972484755885, 4.03678108722017, 5.330903118369765]
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] pred first row = [0.5602785348892212, 0.0935187041759491, 0.17019668221473694, 0.08194197714328766, 0.09406404197216034]
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] argmax counts BEFORE postprocess = {0: 1325, 1: 125, 2: 222, 3: 20, 4: 599}
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] true counts = {0: 1458, 1: 179, 2: 65, 3: 395, 4: 194}
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] argmax counts AFTER postprocess = {0: 1325, 1: 125, 2: 222, 3: 20, 4: 599}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2291, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_TRUE.npy
+* Saving array of shape (2291,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] channels_to_load = ('ECG', 'THO')
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] sleep_study_pair.n_channels = 2
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] raw pred.shape=(2291, 5), y.shape=(2291, 1), org_pred_shape=(2291, 5)
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] pred mean per class = [11.177543767968974, 4.610713658703955, 4.227782809631253, 4.475018919458989, 6.103004570380471]
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] pred first row = [0.29555922746658325, 0.1647631973028183, 0.3125220537185669, 0.1395447850227356, 0.08761077374219894]
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] argmax counts BEFORE postprocess = {0: 1187, 1: 175, 2: 165, 3: 21, 4: 743}
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] true counts = {0: 1458, 1: 179, 2: 65, 3: 395, 4: 194}
+DEBUG [tp7e271aa6_7e17_44c6_ba7b_98647be1cda4] argmax counts AFTER postprocess = {0: 1187, 1: 175, 2: 165, 3: 21, 4: 743}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2291,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_PRED.npy
+* Saving array of shape (2291,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp7e271aa6_7e17_44c6_ba7b_98647be1cda4_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[12/26] Predicting on SleepStudy: tp026536b7_b8d5_44a5_adc6_87617520d5f2
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] sleep_study_pair.n_channels = 2
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] raw pred.shape=(2300, 5), y.shape=(2300, 1), org_pred_shape=(2300, 5)
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] pred mean per class = [11.418586949787063, 4.7710897592196, 6.047688551682817, 4.702946502572816, 3.655340419643275]
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] pred first row = [0.5969315767288208, 0.08479344099760056, 0.11449854075908661, 0.07650073617696762, 0.12727570533752441]
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] argmax counts BEFORE postprocess = {0: 1181, 1: 383, 2: 471, 3: 205, 4: 60}
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] true counts = {0: 1288, 1: 232, 2: 41, 3: 555, 4: 184}
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] argmax counts AFTER postprocess = {0: 1181, 1: 383, 2: 471, 3: 205, 4: 60}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2300, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp026536b7_b8d5_44a5_adc6_87617520d5f2_TRUE.npy
+* Saving array of shape (2300,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp026536b7_b8d5_44a5_adc6_87617520d5f2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] channels_to_load = ('ECG', 'THO')
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] sleep_study_pair.n_channels = 2
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] raw pred.shape=(2300, 5), y.shape=(2300, 1), org_pred_shape=(2300, 5)
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] pred mean per class = [11.345944180987452, 4.8011016893694585, 6.070350088650442, 4.798870963175659, 3.579385254809066]
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] pred first row = [0.4327046573162079, 0.13549450039863586, 0.1505671590566635, 0.12037727236747742, 0.1608564555644989]
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] argmax counts BEFORE postprocess = {0: 1131, 1: 313, 2: 546, 3: 282, 4: 28}
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] true counts = {0: 1288, 1: 232, 2: 41, 3: 555, 4: 184}
+DEBUG [tp026536b7_b8d5_44a5_adc6_87617520d5f2] argmax counts AFTER postprocess = {0: 1131, 1: 313, 2: 546, 3: 282, 4: 28}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2300,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp026536b7_b8d5_44a5_adc6_87617520d5f2_PRED.npy
+* Saving array of shape (2300,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp026536b7_b8d5_44a5_adc6_87617520d5f2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp026536b7_b8d5_44a5_adc6_87617520d5f2_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp026536b7_b8d5_44a5_adc6_87617520d5f2_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[13/26] Predicting on SleepStudy: tp7d09e21c_1c3a_4f7a_8915_28105eafde5a
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] sleep_study_pair.n_channels = 2
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] raw pred.shape=(2361, 5), y.shape=(2361, 1), org_pred_shape=(2361, 5)
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] pred mean per class = [10.825708426697647, 4.8675448291393435, 6.524315925584045, 4.82661922319253, 3.561910701668689]
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] pred first row = [0.6604936122894287, 0.06244369223713875, 0.13671332597732544, 0.06369715183973312, 0.07665220648050308]
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] argmax counts BEFORE postprocess = {0: 1159, 1: 202, 2: 600, 3: 286, 4: 114}
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] true counts = {0: 1234, 1: 239, 2: 138, 3: 672, 4: 78}
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] argmax counts AFTER postprocess = {0: 1159, 1: 202, 2: 600, 3: 286, 4: 114}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2361, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_TRUE.npy
+* Saving array of shape (2361,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] channels_to_load = ('ECG', 'THO')
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] sleep_study_pair.n_channels = 2
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] raw pred.shape=(2361, 5), y.shape=(2361, 1), org_pred_shape=(2361, 5)
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] pred mean per class = [10.411977389025036, 4.928168073075649, 6.347513908827231, 5.030594215211993, 3.8878455190686214]
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] pred first row = [0.6525315046310425, 0.0619085319340229, 0.1520184874534607, 0.06393858045339584, 0.06960294395685196]
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] argmax counts BEFORE postprocess = {0: 1112, 1: 157, 2: 599, 3: 350, 4: 143}
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] true counts = {0: 1234, 1: 239, 2: 138, 3: 672, 4: 78}
+DEBUG [tp7d09e21c_1c3a_4f7a_8915_28105eafde5a] argmax counts AFTER postprocess = {0: 1112, 1: 157, 2: 599, 3: 350, 4: 143}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2361,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_PRED.npy
+* Saving array of shape (2361,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp7d09e21c_1c3a_4f7a_8915_28105eafde5a_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[14/26] Predicting on SleepStudy: tpbcb304a3_99dc_4b81_944d_05bef67747fd
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] channels_to_load = ('ECG', 'ABD')
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] sleep_study_pair.n_channels = 2
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] raw pred.shape=(2392, 5), y.shape=(2392, 1), org_pred_shape=(2392, 5)
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] pred mean per class = [12.418417426625135, 4.09408501742009, 4.558935267878789, 4.214930025039919, 5.324836278877791]
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] pred first row = [0.5677710771560669, 0.09252886474132538, 0.14042705297470093, 0.08662351965904236, 0.11264947056770325]
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] argmax counts BEFORE postprocess = {0: 1489, 1: 118, 2: 269, 3: 93, 4: 423}
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] true counts = {0: 1689, 1: 181, 2: 102, 3: 388, 4: 32}
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] argmax counts AFTER postprocess = {0: 1489, 1: 118, 2: 269, 3: 93, 4: 423}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2392, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tpbcb304a3_99dc_4b81_944d_05bef67747fd_TRUE.npy
+* Saving array of shape (2392,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tpbcb304a3_99dc_4b81_944d_05bef67747fd_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] channels_to_load = ('ECG', 'THO')
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] sleep_study_pair.n_channels = 2
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] raw pred.shape=(2392, 5), y.shape=(2392, 1), org_pred_shape=(2392, 5)
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] pred mean per class = [11.381493448941692, 4.303939490527674, 5.570335677617781, 4.38881039833432, 4.966624997087433]
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] pred first row = [0.5600870251655579, 0.09594035893678665, 0.13826458156108856, 0.0880887508392334, 0.1176193505525589]
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] argmax counts BEFORE postprocess = {0: 1385, 1: 65, 2: 474, 3: 123, 4: 345}
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] true counts = {0: 1689, 1: 181, 2: 102, 3: 388, 4: 32}
+DEBUG [tpbcb304a3_99dc_4b81_944d_05bef67747fd] argmax counts AFTER postprocess = {0: 1385, 1: 65, 2: 474, 3: 123, 4: 345}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2392,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tpbcb304a3_99dc_4b81_944d_05bef67747fd_PRED.npy
+* Saving array of shape (2392,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tpbcb304a3_99dc_4b81_944d_05bef67747fd_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tpbcb304a3_99dc_4b81_944d_05bef67747fd_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tpbcb304a3_99dc_4b81_944d_05bef67747fd_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[15/26] Predicting on SleepStudy: tpab89e702_5d8e_4067_bb3b_141457648e1b
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] channels_to_load = ('ECG', 'ABD')
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] sleep_study_pair.n_channels = 2
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] raw pred.shape=(2088, 5), y.shape=(2088, 1), org_pred_shape=(2088, 5)
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] pred mean per class = [9.900592843134856, 4.604842004303774, 8.764087034689112, 4.6105324351710495, 2.674543391882845]
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] pred first row = [0.4468460977077484, 0.11965601146221161, 0.22828878462314606, 0.11077308654785156, 0.09443606436252594]
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] argmax counts BEFORE postprocess = {0: 855, 1: 35, 2: 1085, 3: 113}
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] true counts = {0: 1622, 1: 86, 2: 99, 3: 281}
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] argmax counts AFTER postprocess = {0: 855, 1: 35, 2: 1085, 3: 113}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2088, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tpab89e702_5d8e_4067_bb3b_141457648e1b_TRUE.npy
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tpab89e702_5d8e_4067_bb3b_141457648e1b_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] channels_to_load = ('ECG', 'THO')
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] sleep_study_pair.n_channels = 2
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] raw pred.shape=(2088, 5), y.shape=(2088, 1), org_pred_shape=(2088, 5)
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] pred mean per class = [7.838603334406826, 5.449131086052991, 8.82417366977146, 5.456135151085312, 2.986554459320788]
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] pred first row = [0.29262369871139526, 0.16627614200115204, 0.2842608392238617, 0.1541471630334854, 0.10269217938184738]
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] argmax counts BEFORE postprocess = {0: 597, 1: 43, 2: 1267, 3: 181}
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] true counts = {0: 1622, 1: 86, 2: 99, 3: 281}
+DEBUG [tpab89e702_5d8e_4067_bb3b_141457648e1b] argmax counts AFTER postprocess = {0: 597, 1: 43, 2: 1267, 3: 181}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tpab89e702_5d8e_4067_bb3b_141457648e1b_PRED.npy
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tpab89e702_5d8e_4067_bb3b_141457648e1b_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tpab89e702_5d8e_4067_bb3b_141457648e1b_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tpab89e702_5d8e_4067_bb3b_141457648e1b_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[16/26] Predicting on SleepStudy: tp279c1280_1066_4a09_9bb7_dc46ae4b22d6
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] sleep_study_pair.n_channels = 2
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] raw pred.shape=(2281, 5), y.shape=(2281, 1), org_pred_shape=(2281, 5)
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] pred mean per class = [8.35586723596746, 5.037514014022587, 6.5006163781496555, 5.7394697402719475, 4.958816715125411]
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] pred first row = [0.4814424514770508, 0.11886713653802872, 0.20353782176971436, 0.09753966331481934, 0.09861289709806442]
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] argmax counts BEFORE postprocess = {0: 808, 1: 72, 2: 624, 3: 372, 4: 405}
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] true counts = {0: 1460, 1: 196, 2: 61, 3: 497, 4: 67}
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] argmax counts AFTER postprocess = {0: 808, 1: 72, 2: 624, 3: 372, 4: 405}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2281, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_TRUE.npy
+* Saving array of shape (2281,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] channels_to_load = ('ECG', 'THO')
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] sleep_study_pair.n_channels = 2
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] raw pred.shape=(2281, 5), y.shape=(2281, 1), org_pred_shape=(2281, 5)
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] pred mean per class = [6.081717097304569, 5.822935166943888, 6.09957695513121, 6.622546210600874, 5.965508656085504]
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] pred first row = [0.2992608845233917, 0.17076128721237183, 0.29632195830345154, 0.13816171884536743, 0.09549415111541748]
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] argmax counts BEFORE postprocess = {0: 457, 1: 224, 2: 631, 3: 391, 4: 578}
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] true counts = {0: 1460, 1: 196, 2: 61, 3: 497, 4: 67}
+DEBUG [tp279c1280_1066_4a09_9bb7_dc46ae4b22d6] argmax counts AFTER postprocess = {0: 457, 1: 224, 2: 631, 3: 391, 4: 578}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2281,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_PRED.npy
+* Saving array of shape (2281,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp279c1280_1066_4a09_9bb7_dc46ae4b22d6_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[17/26] Predicting on SleepStudy: tpaf7a6716_759f_4b15_b77a_aad682760501
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] channels_to_load = ('ECG', 'ABD')
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] sleep_study_pair.n_channels = 2
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] raw pred.shape=(2356, 5), y.shape=(2356, 1), org_pred_shape=(2356, 5)
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] pred mean per class = [10.50476712696191, 5.494389537154224, 6.181333566630015, 4.5973894993406175, 3.8273834338781687]
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] pred first row = [0.24902969598770142, 0.16788266599178314, 0.36080309748649597, 0.14782388508319855, 0.07446067035198212]
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] argmax counts BEFORE postprocess = {0: 1156, 1: 703, 2: 476, 3: 4, 4: 17}
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] true counts = {0: 1924, 1: 10, 2: 167, 3: 247, 4: 8}
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] argmax counts AFTER postprocess = {0: 1156, 1: 703, 2: 476, 3: 4, 4: 17}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2356, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tpaf7a6716_759f_4b15_b77a_aad682760501_TRUE.npy
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] channels_to_load = ('ECG', 'THO')
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] sleep_study_pair.n_channels = 2
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] raw pred.shape=(2356, 5), y.shape=(2356, 1), org_pred_shape=(2356, 5)
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] pred mean per class = [10.176395854207486, 5.469095067834206, 6.492435005347993, 4.751752567702054, 3.7155846549254954]
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] pred first row = [0.30725184082984924, 0.15804578363895416, 0.30628854036331177, 0.14109067618846893, 0.08732318878173828]
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] argmax counts BEFORE postprocess = {0: 1085, 1: 601, 2: 620, 3: 20, 4: 30}
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] true counts = {0: 1924, 1: 10, 2: 167, 3: 247, 4: 8}
+DEBUG [tpaf7a6716_759f_4b15_b77a_aad682760501] argmax counts AFTER postprocess = {0: 1085, 1: 601, 2: 620, 3: 20, 4: 30}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tpaf7a6716_759f_4b15_b77a_aad682760501_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tpaf7a6716_759f_4b15_b77a_aad682760501_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[18/26] Predicting on SleepStudy: tpb1891917_cf87_4c77_8554_db972149b1ee
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] channels_to_load = ('ECG', 'ABD')
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] sleep_study_pair.n_channels = 2
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] raw pred.shape=(2274, 5), y.shape=(2274, 1), org_pred_shape=(2274, 5)
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] pred mean per class = [11.579808969786201, 4.381959095743068, 4.404974758371108, 4.693840927147063, 5.530445273231679]
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] pred first row = [0.7274560928344727, 0.04682209715247154, 0.07862868905067444, 0.05403968691825867, 0.0930534079670906]
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] argmax counts BEFORE postprocess = {0: 1182, 1: 134, 2: 196, 3: 194, 4: 568}
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] true counts = {0: 1332, 1: 178, 2: 58, 3: 566, 4: 140}
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] argmax counts AFTER postprocess = {0: 1182, 1: 134, 2: 196, 3: 194, 4: 568}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2274, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tpb1891917_cf87_4c77_8554_db972149b1ee_TRUE.npy
+* Saving array of shape (2274,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tpb1891917_cf87_4c77_8554_db972149b1ee_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] channels_to_load = ('ECG', 'THO')
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] sleep_study_pair.n_channels = 2
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] raw pred.shape=(2274, 5), y.shape=(2274, 1), org_pred_shape=(2274, 5)
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] pred mean per class = [11.531855686067251, 4.293326970415883, 4.308231565152789, 4.691806207619863, 5.765808598879683]
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] pred first row = [0.7210156321525574, 0.04846594110131264, 0.09963973611593246, 0.054000452160835266, 0.07687825709581375]
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] argmax counts BEFORE postprocess = {0: 1169, 1: 94, 2: 213, 3: 118, 4: 680}
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] true counts = {0: 1332, 1: 178, 2: 58, 3: 566, 4: 140}
+DEBUG [tpb1891917_cf87_4c77_8554_db972149b1ee] argmax counts AFTER postprocess = {0: 1169, 1: 94, 2: 213, 3: 118, 4: 680}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2274,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tpb1891917_cf87_4c77_8554_db972149b1ee_PRED.npy
+* Saving array of shape (2274,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tpb1891917_cf87_4c77_8554_db972149b1ee_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tpb1891917_cf87_4c77_8554_db972149b1ee_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tpb1891917_cf87_4c77_8554_db972149b1ee_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[19/26] Predicting on SleepStudy: tpe524eab6_3c9e_4b81_97d6_0c5966a6081f
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] channels_to_load = ('ECG', 'ABD')
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] sleep_study_pair.n_channels = 2
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] raw pred.shape=(2352, 5), y.shape=(2352, 1), org_pred_shape=(2352, 5)
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] pred mean per class = [14.140450463681736, 4.047906581454967, 4.053072796581744, 3.7942314884185055, 4.568930507099041]
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] pred first row = [0.6907045841217041, 0.0560004748404026, 0.09585810452699661, 0.061571016907691956, 0.09586577117443085]
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] argmax counts BEFORE postprocess = {0: 1479, 1: 282, 2: 192, 3: 72, 4: 327}
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] true counts = {0: 1565, 1: 158, 2: 77, 3: 382, 4: 170}
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] argmax counts AFTER postprocess = {0: 1479, 1: 282, 2: 192, 3: 72, 4: 327}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2352, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_TRUE.npy
+* Saving array of shape (2352,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] channels_to_load = ('ECG', 'THO')
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] sleep_study_pair.n_channels = 2
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] raw pred.shape=(2352, 5), y.shape=(2352, 1), org_pred_shape=(2352, 5)
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] pred mean per class = [13.876330531500026, 4.159322058186442, 3.9909177622773693, 3.777698295894174, 4.8003231962654915]
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] pred first row = [0.6851235032081604, 0.05823693424463272, 0.10794364660978317, 0.060718607157468796, 0.08797738701105118]
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] argmax counts BEFORE postprocess = {0: 1448, 1: 308, 2: 190, 3: 35, 4: 371}
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] true counts = {0: 1565, 1: 158, 2: 77, 3: 382, 4: 170}
+DEBUG [tpe524eab6_3c9e_4b81_97d6_0c5966a6081f] argmax counts AFTER postprocess = {0: 1448, 1: 308, 2: 190, 3: 35, 4: 371}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2352,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_PRED.npy
+* Saving array of shape (2352,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tpe524eab6_3c9e_4b81_97d6_0c5966a6081f_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[20/26] Predicting on SleepStudy: tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] sleep_study_pair.n_channels = 2
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] raw pred.shape=(2263, 5), y.shape=(2263, 1), org_pred_shape=(2263, 5)
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] pred mean per class = [13.107119806866452, 4.185938152019963, 5.015030477768846, 4.452506250238859, 3.8284464156353075]
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] pred first row = [0.5014517903327942, 0.11462446302175522, 0.14484953880310059, 0.10052229464054108, 0.13855193555355072]
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] argmax counts BEFORE postprocess = {0: 1351, 1: 142, 2: 203, 3: 425, 4: 142}
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] true counts = {0: 1291, 1: 194, 2: 53, 3: 372, 4: 353}
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] argmax counts AFTER postprocess = {0: 1351, 1: 142, 2: 203, 3: 425, 4: 142}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2263, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_TRUE.npy
+* Saving array of shape (2263,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] channels_to_load = ('ECG', 'THO')
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] sleep_study_pair.n_channels = 2
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] raw pred.shape=(2263, 5), y.shape=(2263, 1), org_pred_shape=(2263, 5)
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] pred mean per class = [11.423035943978624, 4.732688080687347, 5.649623993920821, 4.679016032766912, 4.104677046798548]
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] pred first row = [0.38211488723754883, 0.1540801078081131, 0.18543753027915955, 0.1320258378982544, 0.14634165167808533]
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] argmax counts BEFORE postprocess = {0: 1224, 1: 189, 2: 332, 3: 349, 4: 169}
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] true counts = {0: 1291, 1: 194, 2: 53, 3: 372, 4: 353}
+DEBUG [tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9] argmax counts AFTER postprocess = {0: 1224, 1: 189, 2: 332, 3: 349, 4: 169}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2263,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_PRED.npy
+* Saving array of shape (2263,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp3a1e953c_0159_48bc_893a_8fb1f4fcb5a9_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[21/26] Predicting on SleepStudy: tp0fd04d65_9289_4842_9b5f_386bd75dc523
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] sleep_study_pair.n_channels = 2
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] raw pred.shape=(2268, 5), y.shape=(2268, 1), org_pred_shape=(2268, 5)
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] pred mean per class = [9.760830928246298, 4.933422833270471, 7.398052786910542, 5.329084084947418, 3.1685564500859544]
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] pred first row = [0.6285300254821777, 0.07337325811386108, 0.11504039913415909, 0.07540591061115265, 0.10765048116445541]
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] argmax counts BEFORE postprocess = {0: 882, 1: 72, 2: 947, 3: 302, 4: 65}
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] true counts = {0: 1156, 1: 409, 2: 88, 3: 463, 4: 152}
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] argmax counts AFTER postprocess = {0: 882, 1: 72, 2: 947, 3: 302, 4: 65}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2268, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp0fd04d65_9289_4842_9b5f_386bd75dc523_TRUE.npy
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp0fd04d65_9289_4842_9b5f_386bd75dc523_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] channels_to_load = ('ECG', 'THO')
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] sleep_study_pair.n_channels = 2
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] raw pred.shape=(2268, 5), y.shape=(2268, 1), org_pred_shape=(2268, 5)
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] pred mean per class = [9.451675845835705, 5.003613936852802, 7.237213251148096, 5.61883283255382, 3.278611232761484]
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] pred first row = [0.57450270652771, 0.08470167964696884, 0.1408906877040863, 0.09179695695638657, 0.10810800641775131]
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] argmax counts BEFORE postprocess = {0: 883, 1: 24, 2: 811, 3: 490, 4: 60}
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] true counts = {0: 1156, 1: 409, 2: 88, 3: 463, 4: 152}
+DEBUG [tp0fd04d65_9289_4842_9b5f_386bd75dc523] argmax counts AFTER postprocess = {0: 883, 1: 24, 2: 811, 3: 490, 4: 60}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp0fd04d65_9289_4842_9b5f_386bd75dc523_PRED.npy
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp0fd04d65_9289_4842_9b5f_386bd75dc523_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp0fd04d65_9289_4842_9b5f_386bd75dc523_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp0fd04d65_9289_4842_9b5f_386bd75dc523_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[22/26] Predicting on SleepStudy: tp52125fb9_b4de_4e43_b95d_241af933bc46
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] sleep_study_pair.n_channels = 2
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] raw pred.shape=(2239, 5), y.shape=(2239, 1), org_pred_shape=(2239, 5)
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] pred mean per class = [14.688709511384602, 3.429963248044372, 4.480765372955637, 3.9840940318738793, 4.001103835710328]
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] pred first row = [0.5590084791183472, 0.09100786596536636, 0.1626809537410736, 0.08758608996868134, 0.09971652179956436]
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] argmax counts BEFORE postprocess = {0: 1417, 1: 6, 2: 428, 3: 246, 4: 142}
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] true counts = {0: 1468, 1: 200, 2: 57, 3: 407, 4: 107}
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] argmax counts AFTER postprocess = {0: 1417, 1: 6, 2: 428, 3: 246, 4: 142}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2239, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp52125fb9_b4de_4e43_b95d_241af933bc46_TRUE.npy
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] channels_to_load = ('ECG', 'THO')
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] sleep_study_pair.n_channels = 2
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] raw pred.shape=(2239, 5), y.shape=(2239, 1), org_pred_shape=(2239, 5)
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] pred mean per class = [14.457409763959115, 3.5550042193561007, 4.660585192764654, 4.149036306688207, 3.7626005162739924]
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] pred first row = [0.565007746219635, 0.08992379158735275, 0.14978963136672974, 0.08793815970420837, 0.10734067857265472]
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] argmax counts BEFORE postprocess = {0: 1358, 2: 451, 3: 348, 4: 82}
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] true counts = {0: 1468, 1: 200, 2: 57, 3: 407, 4: 107}
+DEBUG [tp52125fb9_b4de_4e43_b95d_241af933bc46] argmax counts AFTER postprocess = {0: 1358, 2: 451, 3: 348, 4: 82}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp52125fb9_b4de_4e43_b95d_241af933bc46_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp52125fb9_b4de_4e43_b95d_241af933bc46_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[23/26] Predicting on SleepStudy: tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] sleep_study_pair.n_channels = 2
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] raw pred.shape=(2214, 5), y.shape=(2214, 1), org_pred_shape=(2214, 5)
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] pred mean per class = [10.801111707452081, 4.5707876268957675, 5.489079077961134, 4.74250003347525, 4.976467347415307]
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] pred first row = [0.2520017921924591, 0.200908362865448, 0.20445875823497772, 0.17714110016822815, 0.16548995673656464]
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] argmax counts BEFORE postprocess = {0: 1104, 1: 176, 2: 383, 3: 85, 4: 466}
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] true counts = {0: 1407, 1: 98, 2: 70, 3: 369, 4: 270}
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] argmax counts AFTER postprocess = {0: 1104, 1: 176, 2: 383, 3: 85, 4: 466}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2214, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_TRUE.npy
+* Saving array of shape (2214,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] channels_to_load = ('ECG', 'THO')
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] sleep_study_pair.n_channels = 2
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] raw pred.shape=(2214, 5), y.shape=(2214, 1), org_pred_shape=(2214, 5)
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] pred mean per class = [8.178035011587374, 5.477531978762906, 5.980905455218286, 5.6978250594831525, 5.245648300981901]
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] pred first row = [0.09896967560052872, 0.26241064071655273, 0.19595856964588165, 0.24952423572540283, 0.19313690066337585]
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] argmax counts BEFORE postprocess = {0: 729, 1: 241, 2: 567, 3: 240, 4: 437}
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] true counts = {0: 1407, 1: 98, 2: 70, 3: 369, 4: 270}
+DEBUG [tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136] argmax counts AFTER postprocess = {0: 729, 1: 241, 2: 567, 3: 240, 4: 437}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2214,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_PRED.npy
+* Saving array of shape (2214,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp346bd2d4_882b_4c88_9c2a_2fdf8a4e3136_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[24/26] Predicting on SleepStudy: tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] sleep_study_pair.n_channels = 2
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] raw pred.shape=(2189, 5), y.shape=(2189, 1), org_pred_shape=(2189, 5)
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] pred mean per class = [11.882116351511488, 4.815124231958638, 5.074544448356152, 4.3229088061453, 4.480454628193702]
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] pred first row = [0.6479792594909668, 0.07037220150232315, 0.10429258644580841, 0.06816580146551132, 0.10919021815061569]
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] argmax counts BEFORE postprocess = {0: 1247, 1: 502, 2: 176, 3: 61, 4: 203}
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] true counts = {0: 936, 1: 347, 2: 45, 3: 539, 4: 322}
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] argmax counts AFTER postprocess = {0: 1247, 1: 502, 2: 176, 3: 61, 4: 203}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2189, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_TRUE.npy
+* Saving array of shape (2189,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] channels_to_load = ('ECG', 'THO')
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] sleep_study_pair.n_channels = 2
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] raw pred.shape=(2189, 5), y.shape=(2189, 1), org_pred_shape=(2189, 5)
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] pred mean per class = [11.243729735902043, 5.112719948198042, 5.340739194235678, 4.484002453841306, 4.393957142028473]
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] pred first row = [0.6478821039199829, 0.06989352405071259, 0.09629406034946442, 0.0688122883439064, 0.1171179860830307]
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] argmax counts BEFORE postprocess = {0: 1203, 1: 564, 2: 216, 3: 98, 4: 108}
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] true counts = {0: 936, 1: 347, 2: 45, 3: 539, 4: 322}
+DEBUG [tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3] argmax counts AFTER postprocess = {0: 1203, 1: 564, 2: 216, 3: 98, 4: 108}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2189,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_PRED.npy
+* Saving array of shape (2189,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[25/26] Predicting on SleepStudy: tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] sleep_study_pair.n_channels = 2
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] raw pred.shape=(2107, 5), y.shape=(2107, 1), org_pred_shape=(2107, 5)
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] pred mean per class = [11.370706118904955, 4.742547759300034, 6.282876682116358, 4.4164980740189606, 3.745985513939343]
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] pred first row = [0.6452649235725403, 0.0665726587176323, 0.13730894029140472, 0.06881143152713776, 0.08204208314418793]
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] argmax counts BEFORE postprocess = {0: 1102, 1: 273, 2: 551, 3: 90, 4: 91}
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] true counts = {0: 1238, 1: 190, 2: 53, 3: 324, 4: 302}
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] argmax counts AFTER postprocess = {0: 1102, 1: 273, 2: 551, 3: 90, 4: 91}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2107, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_TRUE.npy
+* Saving array of shape (2107,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] channels_to_load = ('ECG', 'THO')
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] sleep_study_pair.n_channels = 2
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] raw pred.shape=(2107, 5), y.shape=(2107, 1), org_pred_shape=(2107, 5)
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] pred mean per class = [11.915119454524545, 4.796427308810291, 5.758465787842269, 4.214901360788784, 3.8737002295739402]
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] pred first row = [0.5317504405975342, 0.08863432705402374, 0.22921735048294067, 0.08288843184709549, 0.06750943511724472]
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] argmax counts BEFORE postprocess = {0: 1187, 1: 398, 2: 376, 3: 20, 4: 126}
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] true counts = {0: 1238, 1: 190, 2: 53, 3: 324, 4: 302}
+DEBUG [tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba] argmax counts AFTER postprocess = {0: 1187, 1: 398, 2: 376, 3: 20, 4: 126}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2107,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_PRED.npy
+* Saving array of shape (2107,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp8cdb6944_497d_49c2_9261_5b5bc4e1bfba_cm.png
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[26/26] Predicting on SleepStudy: tp1599a50d_347a_499b_9668_470f922efcf9
+DEBUG dataset.misc = {'channel_groups': [(ChannelMontage(ECG-None),), (ChannelMontage(ABD-None), ChannelMontage(THO-None))]}
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] channel_sets = [('ECG+ABD', ('ECG', 'ABD')), ('ECG+THO', ('ECG', 'THO'))]
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] has psg_file_path = True
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] channels_to_load = ('ECG', 'ABD')
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] sleep_study_pair.n_channels = 2
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] raw pred.shape=(2312, 5), y.shape=(2312, 1), org_pred_shape=(2312, 5)
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] pred mean per class = [7.547834234215499, 5.576196598543247, 7.206177060397271, 5.79190614470039, 4.475636830928842]
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] pred first row = [0.284484326839447, 0.18991601467132568, 0.2488604635000229, 0.15496329963207245, 0.12177588045597076]
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] argmax counts BEFORE postprocess = {0: 732, 1: 157, 2: 705, 3: 441, 4: 277}
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] true counts = {0: 1166, 1: 195, 2: 143, 3: 504, 4: 304}
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] argmax counts AFTER postprocess = {0: 732, 1: 157, 2: 705, 3: 441, 4: 277}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2312, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/tp1599a50d_347a_499b_9668_470f922efcf9_TRUE.npy
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+ABD/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] channels_to_load = ('ECG', 'THO')
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] sleep_study_pair.n_channels = 2
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] seq.n_channels = 2
+--------------------------------------------------------------------------------
+>>> Logged by: 'predict_study' in 'predict.py'
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] raw pred.shape=(2312, 5), y.shape=(2312, 1), org_pred_shape=(2312, 5)
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] pred mean per class = [5.506727109598737, 6.224306133706252, 7.311520674623626, 6.7513779057334835, 4.803819034509619]
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] pred first row = [0.17429953813552856, 0.22673355042934418, 0.2668318748474121, 0.20580317080020905, 0.12633179128170013]
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] argmax counts BEFORE postprocess = {0: 416, 1: 133, 2: 856, 3: 630, 4: 277}
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] true counts = {0: 1166, 1: 195, 2: 143, 3: 504, 4: 304}
+DEBUG [tp1599a50d_347a_499b_9668_470f922efcf9] argmax counts AFTER postprocess = {0: 416, 1: 133, 2: 856, 3: 630, 4: 277}
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/ECG+THO/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+Saved hypnogram to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_hypnogram/tp1599a50d_347a_499b_9668_470f922efcf9_hypnogram.png
+Saved confusion matrix to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00312plot/test_data/dcsm/majority_confusion_matrix/tp1599a50d_347a_499b_9668_470f922efcf9_cm.png

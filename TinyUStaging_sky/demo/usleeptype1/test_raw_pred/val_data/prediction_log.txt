@@ -1,0 +1,8 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/test_raw_pred/val_data
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'predict.py'
+Args dump: 
+{'folder_regex': None, 'project_dir': './', 'data_per_prediction': None, 'channels': None, 'majority': False, 'data_split': 'val_data', 'out_dir': 'test_raw_pred', 'num_GPUs': 1, 'strip_func': None, 'num_test_time_augment': 0, 'one_shot': False, 'save_true': False, 'overwrite': True, 'force_GPU': '0', 'no_argmax': False, 'weights_file_name': None, 'continue_': False}
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'hparams.py'
+YAML path:    /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/hparams.yaml

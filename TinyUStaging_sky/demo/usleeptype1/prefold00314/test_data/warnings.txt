@@ -1,0 +1,6 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold00314/test_data
+[WARNING] Path /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky does not contain a Git repository, or Git is not installed on this system.
+-- The software verison match could not be varified against the hyperparameter file.
+-- Software version will not be added to the hyperparameter file.
+[WARNING] Quality control for sample 'tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3' affected 12/2189 epochs in channel 0
+[WARNING] Quality control for sample 'tp7072ccdb_75a3_42fd_81c9_d71f0d3a3af3' affected 4/2189 epochs in channel 1

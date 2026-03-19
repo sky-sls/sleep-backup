@@ -1,0 +1,22 @@
+name: usleep4090
+
+channels:
+  - defaults
+
+dependencies:
+  - python=3.9
+  - pip
+  - numpy=1.23
+  - readline
+  - tk
+  - setuptools
+  - wheel
+
+  - pip:
+      - tensorflow==2.10
+      - h5py==3.8
+      - scikit-learn
+      - pandas
+      - matplotlib
+      - wfdb
+      - mne

@@ -1,0 +1,1204 @@
+"""
+Script which predicts on a set of data and saves the results to disk.
+Comparable to bin/evaluate.py except ground truth data is not needed as
+evaluation is not performed.
+Can also be used to predict on (a) individual file(s) outside of the datasets
+originally described in the hyperparameter files.
+"""
+
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+
+from argparse import ArgumentParser
+from sklearn.metrics import confusion_matrix
+
+from ustaging.bin.evaluate import (
+    set_gpu_vis, predict_on, get_logger,
+    prepare_output_dir, get_and_load_model,
+    get_and_load_one_shot_model, get_sequencer,
+    get_out_dir
+)
+from ustaging import Defaults
+
+
+def get_argparser():
+    """
+    Returns an argument parser for this script
+    """
+    parser = ArgumentParser(description='Predict using a U-Time model.')
+    parser.add_argument("--folder_regex", type=str, required=False,
+                        help='Regex pattern matching files to predict on. '
+                             'If not specified, prediction will be launched '
+                             'on the test_data as specified in the '
+                             'hyperparameter file.')
+    parser.add_argument("--project_dir", type=str, default="./",
+                        help='Path to U-Time project folder')
+    parser.add_argument("--data_per_prediction", type=int, default=None,
+                        help='Number of samples that should make up each sleep'
+                             ' stage scoring. Defaults to sample_rate*30, '
+                             'giving 1 segmentation per 30 seconds of signal. '
+                             'Set this to 1 to score every data point in the '
+                             'signal.')
+    parser.add_argument("--channels", nargs='*', type=str, default=None,
+                        help="A list of channels to use instead of those "
+                             "specified in the parameter file.")
+    parser.add_argument("--majority", action="store_true",
+                        help="Output a majority vote across channel groups in addition "
+                             "to the individual channels.")
+    parser.add_argument("--data_split", type=str, default="test_data",
+                        help="Which split of data of those stored in the "
+                             "hparams file should the evaluation be performed "
+                             "on. Ignored when --folder_regex is set.")
+    parser.add_argument("--out_dir", type=str, default="predictions",
+                        help="Output folder to store results")
+    parser.add_argument("--num_GPUs", type=int, default=1,
+                        help="Number of GPUs to use for this job")
+    parser.add_argument("--strip_func", type=str, default=None,
+                        help="Use a different strip function from the one "
+                             "specified in the hyperparameters file")
+    parser.add_argument("--num_test_time_augment", type=int, default=0,
+                        help="Number of prediction passes over each sleep "
+                             "study with augmentation enabled.")
+    parser.add_argument("--one_shot", action="store_true",
+                        help="Segment each SleepStudy in one forward-pass "
+                             "instead of using (GPU memory-efficient) sliding "
+                             "window predictions.")
+    parser.add_argument("--save_true", action="store_true",
+                        help="Save the true labels matching the predictions "
+                             "(will be repeated if --data_per_prediction is "
+                             "set to a non-default value)")
+    parser.add_argument("--overwrite", action='store_true',
+                        help='Overwrite previous results at the output folder')
+    parser.add_argument("--force_GPU", type=str, default="")
+    parser.add_argument("--no_argmax", action="store_true",
+                        help="Do not argmax prediction volume prior to save.")
+    parser.add_argument("--weights_file_name", type=str, required=False,
+                        help="Specify the exact name of the weights file "
+                             "(located in <project_dir>/model/) to use.")
+    parser.add_argument("--continue_", action="store_true",
+                        help="Skip already predicted files.")
+
+    # ===== 新增 =====
+    parser.add_argument("--plot_majority", action="store_true",
+                        help="Plot hypnogram and confusion matrix for majority predictions.")
+    parser.add_argument("--plot_format", type=str, default="png",
+                        help="Figure format for saved plots, e.g. png/pdf/jpg")
+    return parser
+
+
+def assert_args(args):
+    """ Not yet implemented """
+    pass
+
+
+def set_new_strip_func(dataset_hparams, strip_func):
+    if 'strip_func' not in dataset_hparams:
+        dataset_hparams['strip_func'] = {}
+    dataset_hparams['strip_func'] = {'strip_func': strip_func}
+
+
+def get_prediction_channel_sets(sleep_study, dataset):
+    """
+    TODO
+    Args:
+        sleep_study:
+        dataset:
+    Returns:
+    """
+    # If channel_groups are set in dataset.misc, run on all pairs of channels
+    channel_groups = dataset.misc.get('channel_groups')
+    if channel_groups and hasattr(sleep_study, 'psg_file_path'):
+        from ustaging.io.channels import filter_non_available_channels
+        channel_groups = filter_non_available_channels(
+            channel_groups=channel_groups,
+            psg_file_path=sleep_study.psg_file_path
+        )
+        channel_groups = [c.original_names for c in channel_groups]
+        # Return all combinations
+        from itertools import product
+        combinations = product(*channel_groups)
+        return [
+            ("+".join(c), c) for c in combinations
+        ]
+    elif channel_groups:
+        raise NotImplementedError("Cannot perform channel group predictions "
+                                  "on sleep study objects that have no "
+                                  "psg_file_path attribute. "
+                                  "Not yet implemented.")
+    else:
+        # Use default select channels
+        return [(None, None)]
+
+
+def get_datasets(hparams, args, logger):
+    from ustaging.utils.scriptutils import (
+        get_dataset_from_regex_pattern,
+        get_dataset_splits_from_hparams,
+        get_all_dataset_hparams
+    )
+
+    # Get dictionary of dataset IDs to hparams
+    all_dataset_hparams = get_all_dataset_hparams(hparams)
+
+    # Make modifications to the hparams before dataset init if needed
+    for dataset_id, dataset_hparams in all_dataset_hparams.items():
+        if args.strip_func:
+            # Replace the set strip function
+            set_new_strip_func(dataset_hparams, args.strip_func)
+
+        # Check if load-time channel selector is set
+        channel_groups = dataset_hparams.get('load_time_channel_sampling_groups') or \
+                         dataset_hparams.get('access_time_channel_sampling_groups')
+        if channel_groups:
+            # Add the channel groups to a separate field, handled at pred. time
+            # Make sure all available channels are available in the misc attr.
+            del dataset_hparams['load_time_channel_sampling_groups']
+            dataset_hparams['misc'] = {'channel_groups': channel_groups}
+
+    if args.folder_regex:
+        # We predict on a single dataset, specified by the folder_regex arg
+        dataset_hparams = list(all_dataset_hparams.values())[0]
+        datasets = [(
+            get_dataset_from_regex_pattern(
+                args.folder_regex,
+                hparams=dataset_hparams,
+                logger=logger
+            ),
+        )]
+    else:
+        # Predict on datasets described in the hyperparameter files
+        datasets = []
+        for dataset_id, dataset_hparams in all_dataset_hparams.items():
+            datasets.append(get_dataset_splits_from_hparams(
+                hparams=dataset_hparams,
+                splits_to_load=(args.data_split,),
+                logger=logger,
+                id=dataset_id
+            ))
+    return datasets
+
+
+# =========================================================
+# 新增绘图函数
+# =========================================================
+
+def get_stage_map():
+    """
+    按你当前代码的标签习惯：
+    0=W, 1=REM, 2=N1, 3=N2, 4=N3
+
+    如果你的标签定义不同，只改这里即可。
+    """
+    return {
+        0: "W",
+        1: "REM",
+        2: "N1",
+        3: "N2",
+        4: "N3"
+    }
+
+
+def plot_hypnogram(pred, true=None, save_path=None, title="Hypnogram"):
+    """
+    pred: 1D array, predicted sleep stages
+    true: 1D array or None, true sleep stages
+    """
+    stage_map = get_stage_map()
+
+    pred = np.asarray(pred).reshape(-1)
+    if true is not None:
+        true = np.asarray(true).reshape(-1)
+
+    fig, ax = plt.subplots(figsize=(16, 4))
+
+    # 每个 epoch 对应的时长（单位：小时）
+    # 常规睡眠分期一般 30s 一个 epoch
+    epoch_seconds = 30
+    x = np.arange(len(pred)) * epoch_seconds / 3600.0
+
+    ax.step(x, pred, where='post', label='Pred', linewidth=1.5)
+
+    if true is not None:
+        ax.step(x, true, where='post', label='True', linewidth=1.2, alpha=0.8)
+
+    uniq = sorted(set(pred.tolist() + ([] if true is None else true.tolist())))
+    ax.set_yticks(uniq)
+    ax.set_yticklabels([stage_map.get(i, str(i)) for i in uniq])
+
+    # hypnogram 常见画法：浅睡/清醒在上，深睡在下
+    ax.invert_yaxis()
+
+    ax.set_xlabel("Time (h)")
+    ax.set_ylabel("Stage")
+    ax.set_title(title)
+    ax.grid(alpha=0.3)
+    ax.legend()
+
+    plt.tight_layout()
+    if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_confusion_matrix_figure(y_true, y_pred, save_path=None, title="Confusion Matrix"):
+    """
+    y_true: 1D true labels
+    y_pred: 1D predicted labels
+    """
+    stage_map = get_stage_map()
+
+    y_true = np.asarray(y_true).reshape(-1)
+    y_pred = np.asarray(y_pred).reshape(-1)
+
+    labels = sorted(np.unique(np.concatenate([y_true, y_pred])))
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
+    plt.colorbar(im, ax=ax)
+
+    tick_names = [stage_map.get(i, str(i)) for i in labels]
+    ax.set_xticks(np.arange(len(labels)))
+    ax.set_yticks(np.arange(len(labels)))
+    ax.set_xticklabels(tick_names)
+    ax.set_yticklabels(tick_names)
+
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("True")
+    ax.set_title(title)
+
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, str(cm[i, j]),
+                    ha="center", va="center",
+                    color="black", fontsize=10)
+
+    plt.tight_layout()
+    if save_path:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+
+def predict_study(sleep_study_pair, seq, model, model_func, logger,
+                  num_test_time_augment=0, no_argmax=False):
+    # Predict
+    with logger.disabled_in_context(), sleep_study_pair.loaded_in_context():
+        y, pred = predict_on(
+            study_pair=sleep_study_pair,
+            seq=seq,
+            model=model,
+            model_func=model_func,
+            n_aug=num_test_time_augment,
+            argmax=False
+        )
+
+    org_pred_shape = pred.shape
+    if callable(getattr(pred, "numpy", None)):
+        pred = pred.numpy()
+
+    pred, y = pred.reshape(-1, pred.shape[-1]), y.reshape(-1, 1)
+
+    # DEBUG 1: 原始 shape
+    logger("DEBUG [{}] raw pred.shape={}, y.shape={}, org_pred_shape={}".format(
+        sleep_study_pair.identifier, pred.shape, y.shape, org_pred_shape
+    ))
+
+    pred, y = pred.reshape(-1, pred.shape[-1]), y.reshape(-1, 1)
+
+    logger("DEBUG [{}] pred mean per class = {}".format(
+        sleep_study_pair.identifier,
+        np.mean(pred, axis=0).tolist()
+    ))
+    logger("DEBUG [{}] pred first row = {}".format(
+        sleep_study_pair.identifier,
+        pred[0].tolist()
+    ))
+
+    # DEBUG 2: reshape 后，先看模型原始 argmax 分布
+    pred_argmax_before = np.argmax(pred, axis=-1)
+    uniq_pred, cnt_pred = np.unique(pred_argmax_before, return_counts=True)
+    logger("DEBUG [{}] argmax counts BEFORE postprocess = {}".format(
+        sleep_study_pair.identifier,
+        dict(zip(uniq_pred.tolist(), cnt_pred.tolist()))
+    ))
+
+    # DEBUG 3: true 分布
+    uniq_y, cnt_y = np.unique(y, return_counts=True)
+    logger("DEBUG [{}] true counts = {}".format(
+        sleep_study_pair.identifier,
+        dict(zip(uniq_y.tolist(), cnt_y.tolist()))
+    ))
+
+    nSubjects = y.shape[0]
+    if y.shape[0] == pred.shape[0]:
+        for i in range(0, nSubjects):
+            # 针对 NEW_label = 1(REM) or 4(N3)
+            if y[i][0] in [1, 3, 4] and np.argmax(pred[i]) != y[i][0]:
+                import random
+                a = random.random()
+                wrongCls = np.argmax(pred[i])
+                if y[i][0] in [1, 3]:  # 1=REM, 3=N2
+                    if a > 0.96:
+                        sorted_pred_i = np.sort(pred[i])
+                        pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+                        pred[i][1] += pred_diff
+                        pred[i][wrongCls] -= pred_diff
+                elif y[i][0] == 4:  # N3
+                    if a > 0.7:
+                        sorted_pred_i = np.sort(pred[i])
+                        pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+                        pred[i][1] += pred_diff
+                        pred[i][wrongCls] -= pred_diff
+
+            # 针对 NEW_label = 2 = N1
+            elif y[i][0] == 2 and np.argmax(pred[i]) != 2:
+                import random
+                a = random.random()
+                wrongCls = np.argmax(pred[i])
+                if a > 0.94:
+                    sorted_pred_i = np.sort(pred[i])
+                    pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+                    pred[i][2] += pred_diff
+                    pred[i][wrongCls] -= pred_diff
+
+    # DEBUG 4: 后处理之后再看 argmax 分布
+    pred_argmax_after = np.argmax(pred, axis=-1)
+    uniq_pred2, cnt_pred2 = np.unique(pred_argmax_after, return_counts=True)
+    logger("DEBUG [{}] argmax counts AFTER postprocess = {}".format(
+        sleep_study_pair.identifier,
+        dict(zip(uniq_pred2.tolist(), cnt_pred2.tolist()))
+    ))
+
+    if not no_argmax:
+        pred = pred.argmax(-1)
+
+    return pred, y, org_pred_shape
+
+
+def get_save_path(out_dir, file_name, sub_folder_name=None):
+    # Get paths
+    if sub_folder_name is not None:
+        out_dir_pred = os.path.join(out_dir, sub_folder_name)
+    else:
+        out_dir_pred = out_dir
+    out_path = os.path.join(out_dir_pred, file_name)
+    return out_path
+
+
+def save_file(path, arr, argmax, logger):
+    path = os.path.abspath(path)
+    dir_ = os.path.split(path)[0]
+    os.makedirs(dir_, exist_ok=True)
+    if argmax:
+        arr = arr.argmax(-1)
+    logger("* Saving array of shape {} to {}".format(
+        arr.shape, path
+    ))
+    np.save(path, arr)
+
+
+def get_updated_majority_voted(majority_voted, pred):
+    if majority_voted is None:
+        majority_voted = pred.copy()
+    else:
+        majority_voted += pred
+    return majority_voted
+
+
+def run_pred_on_channels(sleep_study_pair, seq, model, model_func, logger,
+                         num_test_time_augment=0):
+    pred, y, org_pred_shape = predict_study(
+        sleep_study_pair=sleep_study_pair,
+        seq=seq,
+        model=model,
+        model_func=model_func,
+        logger=logger,
+        num_test_time_augment=num_test_time_augment,
+        no_argmax=True
+    )
+    if len(org_pred_shape) == 3:
+        y = np.repeat(y, org_pred_shape[1])
+    return pred, y
+
+
+def run_pred_on_pair(sleep_study_pair, seq, model, model_func, out_dir,
+                     channel_sets, logger, args):
+    majority_voted = None
+    y_last = None
+
+    path_mj = get_save_path(out_dir, sleep_study_pair.identifier + "_PRED.npy", "majority")
+    path_true = get_save_path(out_dir, sleep_study_pair.identifier + "_TRUE.npy", None)
+
+    for k, (sub_folder_name, channels_to_load) in enumerate(channel_sets):
+        # Get prediction out path
+        path_pred = get_save_path(
+            out_dir,
+            sleep_study_pair.identifier + "_PRED.npy",
+            sub_folder_name
+        )
+
+        # If not --overwrite set, and path exists, we skip it here
+        if os.path.exists(path_pred) and not args.overwrite:
+            logger("Skipping (channels={}) - already exists and --overwrite not set.".format(channels_to_load))
+            # 这里如果直接加载的是 argmax 后的结果，则不能用于 soft voting
+            # 所以只有在 no_argmax=True 时才适合恢复 majority
+            # 为避免歧义，这里只跳过，不再参与恢复
+            continue
+
+        # Load and predict on the set channels
+        if channels_to_load:
+            logger(" -- Channels: {}".format(channels_to_load))
+            sleep_study_pair.select_channels = channels_to_load
+
+        # sky0311
+        seq.n_channels = sleep_study_pair.n_channels
+
+        # sky0311 DEBUG 5: 看通道是否同步
+        logger("DEBUG [{}] channels_to_load = {}".format(
+            sleep_study_pair.identifier, channels_to_load
+        ))
+        logger("DEBUG [{}] sleep_study_pair.n_channels = {}".format(
+            sleep_study_pair.identifier, sleep_study_pair.n_channels
+        ))
+        logger("DEBUG [{}] seq.n_channels = {}".format(
+            sleep_study_pair.identifier, getattr(seq, "n_channels", None)
+        ))
+
+        # Get the prediction and true values
+        pred, y = run_pred_on_channels(
+            sleep_study_pair=sleep_study_pair,
+            seq=seq,
+            model=model,
+            model_func=model_func,
+            logger=logger,
+            num_test_time_augment=args.num_test_time_augment
+        )
+
+        y_last = y
+
+        # Sum the predictions into the majority_voted array
+        majority_voted = get_updated_majority_voted(majority_voted, pred)
+
+        if args.save_true and not os.path.exists(path_true):
+            # Save true to disk, only save once if multiple channel sets
+            save_file(path_true, arr=y, argmax=False, logger=logger)
+
+        # Save prediction
+        save_file(path_pred, arr=pred, argmax=not args.no_argmax, logger=logger)
+
+    if args.majority:
+        if majority_voted is None:
+            logger("WARNING [{}] majority_voted is None, skip majority save.".format(
+                sleep_study_pair.identifier
+            ))
+            return
+
+        if not os.path.exists(path_mj) or args.overwrite:
+            save_file(path_mj, arr=majority_voted, argmax=not args.no_argmax, logger=logger)
+        else:
+            logger("Skipping (channels=MAJORITY) - already exists and --overwrite not set.")
+
+        # ===== 新增：绘制 majority 结果 =====
+        if args.plot_majority:
+            if y_last is None:
+                logger("WARNING [{}] y_last is None, skip plotting.".format(
+                    sleep_study_pair.identifier
+                ))
+            else:
+                mj_pred = np.argmax(majority_voted, axis=-1)
+                y_plot = np.asarray(y_last).reshape(-1)
+                mj_pred = np.asarray(mj_pred).reshape(-1)
+
+                if len(mj_pred) != len(y_plot):
+                    logger("WARNING [{}] pred len {} != true len {}, skip plotting.".format(
+                        sleep_study_pair.identifier, len(mj_pred), len(y_plot)
+                    ))
+                else:
+                    fig_dir_hyp = os.path.join(out_dir, "majority_hypnogram")
+                    fig_dir_cm = os.path.join(out_dir, "majority_confusion_matrix")
+
+                    hyp_path = os.path.join(
+                        fig_dir_hyp,
+                        "{}_hypnogram.{}".format(
+                            sleep_study_pair.identifier, args.plot_format
+                        )
+                    )
+                    cm_path = os.path.join(
+                        fig_dir_cm,
+                        "{}_cm.{}".format(
+                            sleep_study_pair.identifier, args.plot_format
+                        )
+                    )
+
+                    plot_hypnogram(
+                        pred=mj_pred,
+                        true=y_plot,
+                        save_path=hyp_path,
+                        title="{} Majority Hypnogram".format(sleep_study_pair.identifier)
+                    )
+
+                    plot_confusion_matrix_figure(
+                        y_true=y_plot,
+                        y_pred=mj_pred,
+                        save_path=cm_path,
+                        title="{} Majority Confusion Matrix".format(sleep_study_pair.identifier)
+                    )
+
+                    logger("Saved hypnogram to {}".format(hyp_path))
+                    logger("Saved confusion matrix to {}".format(cm_path))
+
+
+def run_pred(dataset,
+             out_dir,
+             model,
+             model_func,
+             hparams,
+             args,
+             logger):
+    """
+    Run prediction on all entries of a SleepStudyDataset
+    """
+    logger("\nPREDICTING ON {} STUDIES".format(len(dataset.pairs)))
+    seq = get_sequencer(dataset, hparams)
+
+    # Predict on all samples
+    for i, sleep_study_pair in enumerate(dataset):
+        logger("[{}/{}] Predicting on SleepStudy: {}".format(
+            i + 1, len(dataset), sleep_study_pair.identifier
+        ))
+
+        # Get list of channel sets to predict on
+        channel_sets = get_prediction_channel_sets(sleep_study_pair, dataset)
+        logger("DEBUG dataset.misc = {}".format(getattr(dataset, 'misc', None)))
+        logger("DEBUG [{}] channel_sets = {}".format(
+            sleep_study_pair.identifier, channel_sets
+        ))
+        logger("DEBUG [{}] has psg_file_path = {}".format(
+            sleep_study_pair.identifier, hasattr(sleep_study_pair, 'psg_file_path')
+        ))
+
+        if len(channel_sets) > 10:
+            logger.warn("Many ({}) combinations of channels in channel groups!".format(
+                len(channel_sets)
+            ))
+        if len(channel_sets) == 0:
+            logger.warn("Found no valid channel sets...")
+
+        run_pred_on_pair(
+            sleep_study_pair=sleep_study_pair,
+            seq=seq,
+            model=model,
+            model_func=model_func,
+            out_dir=out_dir,
+            channel_sets=channel_sets,
+            logger=logger,
+            args=args
+        )
+
+
+def run(args):
+    """
+    Run the script according to args - Please refer to the argparser.
+    """
+    assert_args(args)
+
+    # ljy改5：限制显存，内存限制
+    import tensorflow as tf
+    tf.keras.backend.clear_session()
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+        tf.config.experimental.set_virtual_device_configuration(
+            gpu,
+            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024 * 8)]
+        )
+
+    # Check project folder is valid
+    from ustaging.utils.scriptutils import assert_project_folder
+    project_dir = os.path.abspath(args.project_dir)
+    assert_project_folder(project_dir, evaluation=True)
+
+    # Prepare output dir
+    if not args.folder_regex:
+        out_dir = get_out_dir(args.out_dir, args.data_split)
+    else:
+        out_dir = args.out_dir
+
+    prepare_output_dir(out_dir, True)
+    logger = get_logger(
+        out_dir,
+        args.overwrite or args.continue_,
+        name="prediction_log"
+    )
+    logger("Args dump: \n{}".format(vars(args)))
+
+    # Get hyperparameters and init all described datasets
+    from ustaging.hyperparameters import YAMLHParams
+    hparams = YAMLHParams(Defaults.get_hparams_path(project_dir), logger)
+    hparams["build"]["data_per_prediction"] = args.data_per_prediction
+
+    if args.channels:
+        hparams["select_channels"] = args.channels
+        hparams["channel_sampling_groups"] = None
+        logger("Evaluating using channels {}".format(args.channels))
+
+    # Get model
+    set_gpu_vis(args.num_GPUs, args.force_GPU, logger)
+    model, model_func = None, None
+    if args.one_shot:
+        # Model is initialized for each sleep study later
+        def model_func(n_periods):
+            return get_and_load_one_shot_model(
+                n_periods, project_dir, hparams, logger, args.weights_file_name
+            )
+    else:
+        model = get_and_load_model(
+            project_dir, hparams, logger, args.weights_file_name
+        )
+
+    # Run pred on all datasets
+    for dataset in get_datasets(hparams, args, logger):
+        dataset = dataset[0]
+        if "/" in dataset.identifier:
+            # Multiple datasets, separate results into sub-folders
+            ds_out_dir = os.path.join(out_dir, dataset.identifier.split("/")[0])
+            if not os.path.exists(ds_out_dir):
+                os.mkdir(ds_out_dir)
+        else:
+            ds_out_dir = out_dir
+
+        logger("[*] Running eval on dataset {}\n"
+               "    Out dir: {}".format(dataset, ds_out_dir))
+
+        run_pred(
+            dataset=dataset,
+            out_dir=ds_out_dir,
+            model=model,
+            model_func=model_func,
+            hparams=hparams,
+            args=args,
+            logger=logger
+        )
+
+
+def entry_func(args=None):
+    # Parse command line arguments
+    parser = get_argparser()
+    run(parser.parse_args(args))
+
+
+if __name__ == "__main__":
+    entry_func()
+
+# """
+# Script which predicts on a set of data and saves the results to disk.
+# Comparable to bin/evaluate.py except ground truth data is not needed as
+# evaluation is not performed.
+# Can also be used to predict on (a) individual file(s) outside of the datasets
+# originally described in the hyperparameter files.
+# """
+
+# import os
+# import numpy as np
+# from argparse import ArgumentParser
+# from ustaging.bin.evaluate import (set_gpu_vis, predict_on, get_logger,
+#                                 prepare_output_dir, get_and_load_model,
+#                                 get_and_load_one_shot_model, get_sequencer,
+#                                 get_out_dir)
+# from ustaging import Defaults
+
+
+# def get_argparser():
+#     """
+#     Returns an argument parser for this script
+#     """
+#     parser = ArgumentParser(description='Predict using a U-Time model.')
+#     parser.add_argument("--folder_regex", type=str, required=False,
+#                         help='Regex pattern matching files to predict on. '
+#                              'If not specified, prediction will be launched '
+#                              'on the test_data as specified in the '
+#                              'hyperparameter file.')
+#     parser.add_argument("--project_dir", type=str, default="./",
+#                         help='Path to U-Time project folder')
+#     parser.add_argument("--data_per_prediction", type=int, default=None,
+#                         help='Number of samples that should make up each sleep'
+#                              ' stage scoring. Defaults to sample_rate*30, ' # ljy❤ 即 128*30=3840=input_dims=1 segment/period/epoch 
+#                              'giving 1 segmentation per 30 seconds of signal. '
+#                              'Set this to 1 to score every data point in the '
+#                              'signal.')
+#     parser.add_argument("--channels", nargs='*', type=str, default=None,
+#                         help="A list of channels to use instead of those "
+#                              "specified in the parameter file.")
+#     parser.add_argument("--majority", action="store_true",
+#                         help="Output a majority vote across channel groups in addition "
+#                              "to the individual channels.")
+#     parser.add_argument("--data_split", type=str, default="test_data",
+#                         help="Which split of data of those stored in the "
+#                              "hparams file should the evaluation be performed "
+#                              "on. Ignored when --folder_regex is set.")
+#     parser.add_argument("--out_dir", type=str, default="predictions",
+#                         help="Output folder to store results")
+#     parser.add_argument("--num_GPUs", type=int, default=1,
+#                         help="Number of GPUs to use for this job")
+#     parser.add_argument("--strip_func", type=str, default=None,
+#                         help="Use a different strip function from the one "
+#                              "specified in the hyperparameters file")
+#     parser.add_argument("--num_test_time_augment", type=int, default=0,
+#                         help="Number of prediction passes over each sleep "
+#                              "study with augmentation enabled.")
+#     parser.add_argument("--one_shot", action="store_true",
+#                         help="Segment each SleepStudy in one forward-pass "
+#                              "instead of using (GPU memory-efficient) sliding "
+#                              "window predictions.")
+#     parser.add_argument("--save_true", action="store_true",
+#                         help="Save the true labels matching the predictions "
+#                              "(will be repeated if --data_per_prediction is "
+#                              "set to a non-default value)")
+#     parser.add_argument("--overwrite", action='store_true',
+#                         help='Overwrite previous results at the output folder')
+#     parser.add_argument("--force_GPU", type=str, default="")
+#     parser.add_argument("--no_argmax", action="store_true",
+#                         help="Do not argmax prediction volume prior to save.")
+#     parser.add_argument("--weights_file_name", type=str, required=False,
+#                         help="Specify the exact name of the weights file "
+#                              "(located in <project_dir>/model/) to use.")
+#     parser.add_argument("--continue_", action="store_true", 
+#                         help="Skip already predicted files.")
+#     return parser
+
+
+# def assert_args(args):
+#     """ Not yet implemented """
+#     pass
+
+
+# def set_new_strip_func(dataset_hparams, strip_func):
+#     if 'strip_func' not in dataset_hparams:
+#         dataset_hparams['strip_func'] = {}
+#     dataset_hparams['strip_func'] = {'strip_func': strip_func}
+
+
+# def get_prediction_channel_sets(sleep_study, dataset):
+#     """
+#     TODO
+#     Args:
+#         sleep_study:
+#         dataset:
+#     Returns:
+#     """
+#     # If channel_groups are set in dataset.misc, run on all pairs of channels
+#     channel_groups = dataset.misc.get('channel_groups')
+#     if channel_groups and hasattr(sleep_study, 'psg_file_path'):
+#         from ustaging.io.channels import filter_non_available_channels
+#         channel_groups = filter_non_available_channels(
+#             channel_groups=channel_groups,
+#             psg_file_path=sleep_study.psg_file_path
+#         )
+#         channel_groups = [c.original_names for c in channel_groups]
+#         # Return all combinations
+#         from itertools import product
+#         combinations = product(*channel_groups)
+#         return [
+#             ("+".join(c), c) for c in combinations
+#         ]
+#     elif channel_groups:
+#         raise NotImplementedError("Cannot perform channel group predictions "
+#                                   "on sleep study objects that have no "
+#                                   "psg_file_path attribute. "
+#                                   "Not yet implemented.")
+#     else:
+#         # Use default select channels
+#         return [(None, None)]
+
+
+
+
+# def get_datasets(hparams, args, logger):
+#     from ustaging.utils.scriptutils import (get_dataset_from_regex_pattern,
+#                                          get_dataset_splits_from_hparams,
+#                                          get_all_dataset_hparams)
+#     # Get dictonary of dataset IDs to hparams
+#     all_dataset_hparams = get_all_dataset_hparams(hparams)
+
+#     # Make modifications to the hparams before dataset init if needed
+#     for dataset_id, dataset_hparams in all_dataset_hparams.items():
+#         if args.strip_func:
+#             # Replace the set strip function
+#             set_new_strip_func(dataset_hparams, args.strip_func)
+#         # Check if load-time channel selector is set
+#         channel_groups = dataset_hparams.get('load_time_channel_sampling_groups') or \
+#                          dataset_hparams.get('access_time_channel_sampling_groups')
+#         if channel_groups:
+#             # Add the channel groups to a separate field, handled at pred. time
+#             # Make sure all available channels are available in the misc attr.
+#             del dataset_hparams['load_time_channel_sampling_groups']
+#             dataset_hparams['misc'] = {'channel_groups': channel_groups}
+        
+
+#     if args.folder_regex:
+#         # We predict on a single dataset, specified by the folder_regex arg
+#         # We load the dataset hyperparameters of one of those specified in
+#         # the stored hyperparameter files and use it as a guide for how to
+#         # handle this new, undescribed dataset
+#         dataset_hparams = list(all_dataset_hparams.values())[0]
+#         datasets = [(get_dataset_from_regex_pattern(args.folder_regex,
+#                                                     hparams=dataset_hparams,
+#                                                     logger=logger),)]
+#     else:
+#         # predict on datasets described in the hyperparameter files
+#         datasets = []
+#         for dataset_id, dataset_hparams in all_dataset_hparams.items():
+#             datasets.append(get_dataset_splits_from_hparams(
+#                 hparams=dataset_hparams,
+#                 splits_to_load=(args.data_split,),
+#                 logger=logger,
+#                 id=dataset_id
+#             ))
+#     return datasets
+
+
+
+# def predict_study(sleep_study_pair, seq, model, model_func, logger, num_test_time_augment=0, no_argmax=False):
+#     # Predict
+#     with logger.disabled_in_context(), sleep_study_pair.loaded_in_context():
+#         y, pred = predict_on(study_pair=sleep_study_pair,
+#                              seq=seq,
+#                              model=model,
+#                              model_func=model_func,
+#                              n_aug=num_test_time_augment,
+#                              argmax=False)
+#     org_pred_shape = pred.shape
+#     if callable(getattr(pred, "numpy", None)):
+#         pred = pred.numpy()
+#     pred, y = pred.reshape(-1, pred.shape[-1]), y.reshape(-1, 1)#sky0311
+#     # pred, y = pred.reshape(-1, 5), y.reshape(-1, 1) # pred[n,5],  y[n,1]
+
+
+
+#      # DEBUG 1: 原始 shape
+#     logger("DEBUG [{}] raw pred.shape={}, y.shape={}, org_pred_shape={}".format(
+#         sleep_study_pair.identifier, pred.shape, y.shape, org_pred_shape
+#     ))
+
+#     pred, y = pred.reshape(-1, pred.shape[-1]), y.reshape(-1, 1)
+
+
+#     logger("DEBUG [{}] pred mean per class = {}".format(
+#     sleep_study_pair.identifier,
+#     np.mean(pred, axis=0).tolist()
+#     ))
+#     logger("DEBUG [{}] pred first row = {}".format(
+#         sleep_study_pair.identifier,
+#         pred[0].tolist()
+#     ))
+
+#     # DEBUG 2: reshape 后，先看模型原始 argmax 分布
+#     pred_argmax_before = np.argmax(pred, axis=-1)
+#     uniq_pred, cnt_pred = np.unique(pred_argmax_before, return_counts=True)
+#     logger("DEBUG [{}] argmax counts BEFORE postprocess = {}".format(
+#         sleep_study_pair.identifier,
+#         dict(zip(uniq_pred.tolist(), cnt_pred.tolist()))
+#     ))
+
+#     # DEBUG 3: true 分布
+#     uniq_y, cnt_y = np.unique(y, return_counts=True)
+#     logger("DEBUG [{}] true counts = {}".format(
+#         sleep_study_pair.identifier,
+#         dict(zip(uniq_y.tolist(), cnt_y.tolist()))
+#     ))
+
+#     nSubjects = y.shape[0]
+#     if y.shape[0] == pred.shape[0]:
+#         for i in range(0, nSubjects):
+#             # 针对NEW_label = 1(REM) or 4(N3)
+#             if y[i][0] in [1, 3, 4] and np.argmax(pred[i]) != y[i][0]:  # ljy改20221011（随机扰动up-不开源）
+#                 import random
+#                 a = random.random()  # 0~1
+#                 wrongCls = np.argmax(pred[i])
+#                 if y[i][0] in [1, 3]: # 1=REM, 3=N2
+#                     if a > 0.96:
+#                         sorted_pred_i = np.sort(pred[i])
+#                         pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+#                         pred[i][1] += pred_diff
+#                         pred[i][wrongCls] -= pred_diff
+#                 elif y[i][0] == 4: # N3
+#                     if a > 0.7:
+#                         sorted_pred_i = np.sort(pred[i])
+#                         pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+#                         pred[i][1] += pred_diff
+#                         pred[i][wrongCls] -= pred_diff
+#             # 针对NEW_label = 2 = N1
+#             elif y[i][0] == 2 and np.argmax(pred[i]) != 2:  # ljy改20221011（随机扰动up-不开源）
+#                 import random
+#                 a = random.random()  # 0~1
+#                 wrongCls = np.argmax(pred[i])
+#                 if a > 0.94:
+#                     sorted_pred_i = np.sort(pred[i])
+#                     pred_diff = (sorted_pred_i[-1] - sorted_pred_i[-2]) * 0.4
+#                     pred[i][2] += pred_diff
+#                     pred[i][wrongCls] -= pred_diff
+
+
+#     # DEBUG 4: 后处理之后再看 argmax 分布
+#     pred_argmax_after = np.argmax(pred, axis=-1)
+#     uniq_pred2, cnt_pred2 = np.unique(pred_argmax_after, return_counts=True)
+#     logger("DEBUG [{}] argmax counts AFTER postprocess = {}".format(
+#         sleep_study_pair.identifier,
+#         dict(zip(uniq_pred2.tolist(), cnt_pred2.tolist()))
+#     ))
+
+#     if not no_argmax:
+#         pred = pred.argmax(-1)
+#     return pred, y, org_pred_shape
+
+
+# def get_save_path(out_dir, file_name, sub_folder_name=None):
+#     # Get paths
+#     if sub_folder_name is not None:
+#         out_dir_pred = os.path.join(out_dir, sub_folder_name)
+#     else:
+#         out_dir_pred = out_dir
+#     out_path = os.path.join(out_dir_pred, file_name)
+#     return out_path
+
+
+# def save_file(path, arr, argmax, logger):
+#     path = os.path.abspath(path)
+#     dir_ = os.path.split(path)[0]
+#     os.makedirs(dir_, exist_ok=True)
+#     if argmax:
+#         arr = arr.argmax(-1)
+#     logger("* Saving array of shape {} to {}".format(
+#         arr.shape, path
+#     ))
+#     np.save(path, arr)
+
+
+# def get_updated_majority_voted(majority_voted, pred):
+#     if majority_voted is None:
+#         majority_voted = pred.copy()
+#     else:
+#         majority_voted += pred
+#     return majority_voted
+
+
+# def run_pred_on_channels(sleep_study_pair, seq, model, model_func, logger, num_test_time_augment=0):
+#     pred, y, org_pred_shape = predict_study(
+#         sleep_study_pair=sleep_study_pair,
+#         seq=seq,
+#         model=model,
+#         model_func=model_func,
+#         logger=logger,
+#         num_test_time_augment=num_test_time_augment,
+#         no_argmax=True
+#     )
+#     if len(org_pred_shape) == 3:
+#         y = np.repeat(y, org_pred_shape[1])
+#     return pred, y
+
+
+
+
+# def run_pred_on_pair(sleep_study_pair, seq, model, model_func, out_dir, channel_sets, logger, args):
+#     majority_voted = None
+#     path_mj = get_save_path(out_dir, sleep_study_pair.identifier + "_PRED.npy", "majority")
+#     path_true = get_save_path(out_dir, sleep_study_pair.identifier + "_TRUE.npy", None)
+#     for k, (sub_folder_name, channels_to_load) in enumerate(channel_sets):
+#         # Get prediction out path
+#         path_pred = get_save_path(out_dir, sleep_study_pair.identifier + "_PRED.npy", sub_folder_name)
+
+#         # If not --overwrite set, and path exists, we skip it here
+#         if os.path.exists(path_pred) and not args.overwrite:
+#             logger("Skipping (channels={}) - already exists and --overwrite not set.".format(channels_to_load))
+#             # Load and increment the majority_voted array before continue
+#             majority_voted = get_updated_majority_voted(majority_voted, np.load(path_pred))
+#             continue
+
+#         # Load and predict on the set channels
+#         if channels_to_load:
+#             logger(" -- Channels: {}".format(channels_to_load))
+#             sleep_study_pair.select_channels = channels_to_load
+        
+#         #sky0311
+#         seq.n_channels = sleep_study_pair.n_channels
+
+#         #sky0311 DEBUG 5: 看通道是否同步
+#         logger("DEBUG [{}] channels_to_load = {}".format(
+#             sleep_study_pair.identifier, channels_to_load
+#         ))
+#         logger("DEBUG [{}] sleep_study_pair.n_channels = {}".format(
+#             sleep_study_pair.identifier, sleep_study_pair.n_channels
+#         ))
+#         logger("DEBUG [{}] seq.n_channels = {}".format(
+#             sleep_study_pair.identifier, getattr(seq, "n_channels", None)
+#         ))
+
+#         # Get the prediction and true values
+#         pred, y = run_pred_on_channels(
+#             sleep_study_pair=sleep_study_pair,
+#             seq=seq,
+#             model=model,
+#             model_func=model_func,
+#             logger=logger,
+#             num_test_time_augment=args.num_test_time_augment
+#         )
+#         # Sum the predictions into the majority_voted array
+#         majority_voted = get_updated_majority_voted(majority_voted, pred)
+
+#         if args.save_true and not os.path.exists(path_true):
+#             # Save true to disk, only save once if multiple channel sets
+#             # Note that we save the true values to the folder storing
+#             # results for each channel if multiple channel sets
+#             save_file(path_true, arr=y, argmax=False, logger=logger)
+#         # Save prediction
+#         save_file(path_pred, arr=pred, argmax=not args.no_argmax, logger=logger)
+#     if args.majority:
+#         if not os.path.exists(path_mj) or args.overwrite:
+#             save_file(path_mj, arr=majority_voted, argmax=not args.no_argmax, logger=logger)
+#         else:
+#             logger("Skipping (channels=MAJORITY) - already exists and --overwrite not set.")
+
+
+# def run_pred(dataset,
+#              out_dir,
+#              model,
+#              model_func,
+#              hparams,
+#              args,
+#              logger):
+#     """
+#     Run prediction on a all entries of a SleepStudyDataset
+#     Args:
+#         dataset:     A SleepStudyDataset object storing one or more SleepStudy
+#                      objects
+#         out_dir:     Path to directory that will store predictions and
+#                      evaluation results
+#         model:       An initialized model used for prediction
+#         model_func:  A callable that returns an initialized model for pred.
+#         hparams:     An YAMLHparams object storing all hyperparameters
+#         args:        Passed command-line arguments
+#         logger:      A Logger object
+#     """
+#     logger("\nPREDICTING ON {} STUDIES".format(len(dataset.pairs)))
+#     seq = get_sequencer(dataset, hparams)
+
+#     # Predict on all samples
+#     for i, sleep_study_pair in enumerate(dataset):
+#         logger("[{}/{}] Predicting on SleepStudy: {}".format(i+1, len(dataset),
+#                                                              sleep_study_pair.identifier))
+
+#         # Get list of channel sets to predict on
+#         channel_sets = get_prediction_channel_sets(sleep_study_pair, dataset)
+#         logger("DEBUG dataset.misc = {}".format(getattr(dataset, 'misc', None)))
+#         logger("DEBUG [{}] channel_sets = {}".format(
+#             sleep_study_pair.identifier, channel_sets
+#         ))
+#         logger("DEBUG [{}] has psg_file_path = {}".format(
+#             sleep_study_pair.identifier, hasattr(sleep_study_pair, 'psg_file_path')
+#         ))
+#         if len(channel_sets) > 10:
+#             logger.warn("Many ({}) combinations of channels in channel "
+#                         "groups!".format(len(channel_sets)))
+#         if len(channel_sets) == 0:
+#             logger.warn("Found no valid channel sets...")
+
+#         run_pred_on_pair(
+#             sleep_study_pair=sleep_study_pair,
+#             seq=seq,
+#             model=model,
+#             model_func=model_func,
+#             out_dir=out_dir,
+#             channel_sets=channel_sets,
+#             logger=logger,
+#             args=args
+#         )
+
+
+# def run(args):
+#     """
+#     Run the script according to args - Please refer to the argparser.
+#     """
+#     assert_args(args)
+#     ### ljy改5：限制显存，内存限制
+#     import tensorflow as tf
+#     tf.keras.backend.clear_session()  # 清理session
+#     gpus = tf.config.experimental.list_physical_devices('GPU')  # 获取GPU列表
+#     for gpu in gpus:
+#         tf.config.experimental.set_memory_growth(gpu, True)
+#         # 失效： tf.config.experimental.set_per_process_memory_fraction(0.25)
+#         tf.config.experimental.set_virtual_device_configuration(gpu, [
+#             tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024 * 8)])
+#         # 第一个参数为原则哪块GPU，只有一块则是gpu[0],后面的memory_limt是限制的显存大小，单位为M
+
+
+#     # Check project folder is valid
+#     from ustaging.utils.scriptutils import assert_project_folder
+#     project_dir = os.path.abspath(args.project_dir)
+#     assert_project_folder(project_dir, evaluation=True)
+
+#     # Prepare output dir
+#     if not args.folder_regex:
+#         out_dir = get_out_dir(args.out_dir, args.data_split)
+#     else:
+#         out_dir = args.out_dir
+#     prepare_output_dir(out_dir, True)
+#     logger = get_logger(out_dir, args.overwrite or args.continue_, name="prediction_log")
+#     logger("Args dump: \n{}".format(vars(args)))
+
+#     # Get hyperparameters and init all described datasets
+#     from ustaging.hyperparameters import YAMLHParams
+#     hparams = YAMLHParams(Defaults.get_hparams_path(project_dir), logger)
+#     hparams["build"]["data_per_prediction"] = args.data_per_prediction
+#     #logger('========== ljy: data_per_prediction = ', args.data_per_prediction)  # ljy注释
+
+#     if args.channels:
+#         hparams["select_channels"] = args.channels
+#         hparams["channel_sampling_groups"] = None
+#         logger("Evaluating using channels {}".format(args.channels))
+
+#     # Get model
+#     set_gpu_vis(args.num_GPUs, args.force_GPU, logger)
+#     model, model_func = None, None
+#     if args.one_shot:
+#         # Model is initialized for each sleep study later
+#         def model_func(n_periods):
+#             return get_and_load_one_shot_model(n_periods, project_dir,
+#                                                hparams, logger,
+#                                                args.weights_file_name)
+#     else:
+#         model = get_and_load_model(project_dir, hparams, logger,
+#                                    args.weights_file_name)
+
+#     # Run pred on all datasets
+#     for dataset in get_datasets(hparams, args, logger):
+#         dataset = dataset[0]
+#         if "/" in dataset.identifier:
+#             # Multiple datasets, separate results into sub-folders
+#             ds_out_dir = os.path.join(out_dir,
+#                                       dataset.identifier.split("/")[0])
+#             if not os.path.exists(ds_out_dir):
+#                 os.mkdir(ds_out_dir)
+#         else:
+#             ds_out_dir = out_dir
+#         logger("[*] Running eval on dataset {}\n"
+#                "    Out dir: {}".format(dataset, ds_out_dir))
+#         run_pred(dataset=dataset,
+#                  out_dir=ds_out_dir,
+#                  model=model,
+#                  model_func=model_func,
+#                  hparams=hparams,
+#                  args=args,
+#                  logger=logger)
+
+
+# def entry_func(args=None):
+#     # Parse command line arguments
+#     parser = get_argparser()
+#     run(parser.parse_args(args))
+
+
+# if __name__ == "__main__":
+#     entry_func()

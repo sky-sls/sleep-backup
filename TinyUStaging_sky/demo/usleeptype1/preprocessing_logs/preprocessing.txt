@@ -1,0 +1,40 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/preprocessing_logs
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'preprocess.py'
+Args dump: {'out_path': 'data/fold_9/processed_data.h5', 'dataset_splits': ['train_data', 'val_data'], 'overwrite': True, 'num_threads': 1}
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'hparams.py'
+YAML path:    /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/TRAIN] SleepStudyDataset(identifier: dcsm/TRAIN, N pairs: 184, N loaded: 0)
+[Dataset: dcsm/VAL] SleepStudyDataset(identifier: dcsm/VAL, N pairs: 46, N loaded: 0)
+[Dataset: dcsm/TRAIN] Setting load-time random channel selector: RandomChannelSelector(group_0: ['ECG-None'], group_1: ['ABD-None', 'THO-None'])
+[Dataset: dcsm/VAL] Setting load-time random channel selector: RandomChannelSelector(group_0: ['ECG-None'], group_1: ['ABD-None', 'THO-None'])
+[Dataset: dcsm/TRAIN] Setting sample rate of 128 Hz
+[Dataset: dcsm/VAL] Setting sample rate of 128 Hz
+[Dataset: dcsm/TRAIN] Setting 'strip_to_match' strip function with parameters {}...
+[Dataset: dcsm/VAL] Setting 'strip_to_match' strip function with parameters {}...
+[Dataset: dcsm/TRAIN] Setting 'clip_noisy_values' quality control function with parameters {'min_max_times_global_iqr': 20}...
+[Dataset: dcsm/VAL] Setting 'clip_noisy_values' quality control function with parameters {'min_max_times_global_iqr': 20}...
+[Dataset: dcsm/TRAIN] Setting 'RobustScaler' scaler...
+[Dataset: dcsm/VAL] Setting 'RobustScaler' scaler...
+--------------------------------------------------------------------------------
+>>> Logged by: 'set_value' in 'hparams.py'
+Setting value '/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/dataset_configurations/preprocessed/dcsm.yaml' (type <class 'str'>) in subdir 'datasets' with name 'dcsm'
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_current' in 'hparams.py'
+Saving current YAML configuration to file:
+ /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/pre_proc_hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/TRAIN] Setting load-time random channel selector: None
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'preprocess.py'
+Preprocessing dataset: SleepStudyDataset(identifier: dcsm/TRAIN, N pairs: 184, N loaded: 0)
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/VAL] Setting load-time random channel selector: None
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'preprocess.py'
+Preprocessing dataset: SleepStudyDataset(identifier: dcsm/VAL, N pairs: 46, N loaded: 0)

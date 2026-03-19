@@ -1,0 +1,175 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'train.py'
+Args dump: {'num_GPUs': 1, 'force_GPU': '', 'continue_training': False, 'initialize_from': None, 'log_file_prefix': '', 'overwrite': True, 'just': None, 'no_val': False, 'max_train_samples_per_epoch': 500000, 'n_epochs': None, 'channels': None, 'train_queue_type': 'eager', 'val_queue_type': 'lazy', 'max_loaded_per_dataset': 40, 'num_access_before_reload': 32, 'preprocessed': True, 'fold': 0, 'cv': False, 'train_on_val': False}
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'hparams.py'
+YAML path:    /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/pre_proc_hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_current' in 'hparams.py'
+Saving current YAML configuration to file:
+ /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/pre_proc_hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'update_preprocessed_hparams_with_fold' in 'train.py'
+[INFO] Updated dataset yaml for dcsm: train=/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/data/fold_0/processed_data.h5, val=/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/data/fold_0/processed_data.h5, test=None
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_current' in 'hparams.py'
+Saving current YAML configuration to file:
+ /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/pre_proc_hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'update_preprocessed_hparams_with_fold' in 'train.py'
+[INFO] Updated main preprocessed hparams outputs for fold 0
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'single_h5_dataset.py'
+SingleH5Dataset(identifier=processed_data, path=/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/data/fold_0/processed_data.h5)
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/TRAIN] H5Dataset(identifier=dcsm/TRAIN, members=183, loaded=183)
+[Dataset: dcsm/VAL] H5Dataset(identifier=dcsm/VAL, members=46, loaded=46)
+[Dataset: dcsm/TRAIN] Setting access-time random channel selector: RandomChannelSelector(group_0: ['ECG-None'], group_1: ['ABD-None', 'THO-None'])
+[Dataset: dcsm/VAL] Setting access-time random channel selector: RandomChannelSelector(group_0: ['ECG-None'], group_1: ['ABD-None', 'THO-None'])
+--------------------------------------------------------------------------------
+>>> Logged by: 'get_data_queues' in 'train.py'
+Using data queue type: EagerQueue
+Using data queue type: EagerQueue
+--------------------------------------------------------------------------------
+>>> Logged by: 'augmenters' in 'base_sequence.py'
+Setting augmenter: GlobalGaussianNoise({'sigma': 0.05, 'apply_prob': 0.15})
+Setting augmenter: RegionalGaussianNoise({'sigma': 0.1, 'min_region_fraction': 0.001, 'max_region_fraction': 0.3, 'log_sample': True, 'apply_prob': 0.15})
+Setting augmenter: GlobalElasticDeformations({'alpha': [0, 20], 'sigma': [3, 20], 'apply_prob': 0.1})
+Setting augmenter: RegionalErase({'min_region_fraction': 0.001, 'max_region_fraction': 0.15, 'log_sample': True, 'apply_prob': 0.1})
+Setting augmenter: ChannelDropout({'drop_fraction': 0.05, 'apply_prob': 0.05})
+--------------------------------------------------------------------------------
+>>> Logged by: '_assert_scaled' in 'base_sequence.py'
+Mean assertion (10 periods from each of 3 studies):  0.210
+Scale assertion (10 periods from each of 3 studies):  1.929
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'balanced_random_batch_sequence.py'
+[*] BalancedRandomBatchSequence initialized (dcsm/TRAIN):
+    Data queue type: <class 'ustaging.dataset.queue.eager_queue.EagerQueue'>
+    Batch shape:     [32, 31, 3840, 2]
+    Sample prob.:    [0.3  0.15 0.15 0.25 0.15]
+    N pairs:         183
+    Margin:          15
+    Augmenters:      [<GlobalGaussianNoise>, <RegionalGaussianNoise>, <GlobalElasticDeformations>, <RegionalErase>, <ChannelDropout>]
+    Aug enabled:     True
+    Batch scaling:   False
+    All loaded:      True
+    N classes:       5
+--------------------------------------------------------------------------------
+>>> Logged by: '_assert_scaled' in 'base_sequence.py'
+Mean assertion (10 periods from each of 3 studies):  0.158
+Scale assertion (10 periods from each of 3 studies):  1.991
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'balanced_random_batch_sequence.py'
+[*] BalancedRandomBatchSequence initialized (dcsm/VAL):
+    Data queue type: <class 'ustaging.dataset.queue.eager_queue.EagerQueue'>
+    Batch shape:     [32, 31, 3840, 2]
+    Sample prob.:    [0.3  0.15 0.15 0.25 0.15]
+    N pairs:         46
+    Margin:          15
+    Augmenters:      []
+    Aug enabled:     False
+    Batch scaling:   False
+    All loaded:      True
+    N classes:       5
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'multi_sequence.py'
+[*] ValidationMultiSequence initialized:
+    --- Contains 1 sequences
+    --- Sequence IDs: dcsm
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'train.py'
+[INFO] Disabled augmentation for val_seq.sequences[0]
+--------------------------------------------------------------------------------
+>>> Logged by: 'set_value' in 'hparams.py'
+Setting value '5' (type <class 'int'>) in subdir 'build' with name 'n_classes'
+Setting value '[32, 31, 3840, 2]' (type <class 'list'>) in subdir 'build' with name 'batch_shape'
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_current' in 'hparams.py'
+Saving current YAML configuration to file:
+ /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/pre_proc_hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'init_model' in 'model_init.py'
+Creating new model of type 'UStaging4'
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'ustaging4.py'
+************ sky --- ratio_se:[1, 8, 4, 1] ************ 
+************ sky --- ratio_cbam:None ************ 
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_upsample' in 'ustaging4.py'
+sky--- [Decoder(Upsample)] - cls.get_shape().as_list():  [None, 62, 1, 362]
+Attention (2) - Bottom: SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [create_dense_modeling(1*1 Conv)] - in_.get_shape().as_list():  [None, 119040, 1, 22]
+Attention (3) - Dense (after 1*1 Conv): SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [dense(1*1 Conv)] - cls.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv) (cropped)] - ❤ out.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv)] - in_reshaped.get_shape().as_list():  [None, 119040, 1, 2]
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'ustaging4.py'
+UStaging4 Model Summary
+-------------------
+N periods:         31
+Input dims:        3840
+N channels:        2
+N classes:         5
+Kernel size:       5
+Dilation rate:     ListWrapper([ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2])])
+CF factor:         2.000
+Init filters:      16
+Depth:             4
+Poolings:          ListWrapper([10, 8, 6, 4])
+Transition window  1
+Dense activation   tanh
+l2 reg:            None
+Padding:           same
+Conv activation:   elu
+Receptive field:   33307
+Seq length.:       119040
+N params:          2404763
+Input:             KerasTensor(type_spec=TensorSpec(shape=(None, 31, 3840, 2), dtype=tf.float32, name='input_1'), name='input_1', description="created by layer 'input_1'")
+Output:            KerasTensor(type_spec=TensorSpec(shape=(None, 31, 5), dtype=tf.float32, name=None), name='sequence_classification_reshaped/Reshape:0', description="created by layer 'sequence_classification_reshaped'")
+--------------------------------------------------------------------------------
+>>> Logged by: 'ignore_class_wrapper' in 'trainer.py'
+Regarding loss func: <mpunet.evaluate.loss_functions.SparseFocalDiceLoss_sky object at 0x76063f3a36d0>. Model outputs 5 classes; Ignoring class with integer values 5
+--------------------------------------------------------------------------------
+>>> Logged by: 'compile_model' in 'trainer.py'
+Optimizer:   <keras.optimizers.optimizer_v2.adam.Adam object at 0x76063f3a35b0>
+Loss funcs:  [<tensorflow.python.eager.def_function.Function object at 0x76063f3c3790>]
+Metrics:     <function init_metrics at 0x760651cc9c10>
+Trainer Model Summary2
+-------------------
+None
+-------------------------------------------------
+*********** get FLOPs ********** 
+*********** FLOPs ↑ ********** 
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'train.py'
+sky********** samples_pr_epoch = 13431 ****************
+--------------------------------------------------------------------------------
+>>> Logged by: '_fit' in 'trainer.py'
+Using 420 steps per train epoch
+--------------------------------------------------------------------------------
+>>> Logged by: 'init_callback_objects' in 'funcs.py'
+[1] Using callback: Validation(params=?)
+[2] Using callback: MeanReduceLogArrays(params=?)
+[3] Using callback: TensorBoard(log_dir=./tensorboard/fold_0)
+[4] Using callback: ModelCheckPointClean(filepath=./model/fold_0_@epoch_{epoch:02d}_val_loss_{val_loss:.5f}.h5, monitor=val_loss, save_best_only=True, save_weights_only=True, verbose=1, mode=min)
+[5] Using callback: TrainTimer(verbose=True, logger=Logger(base_path=/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1, print_to_screen=True, overwrite_existing=True, append_existing=False))
+[6] Using callback: CSVLogger(filename=logs/fold_0_training.csv, separator=,, append=True)
+[7] Using callback: EarlyStopping(monitor=val_loss, min_delta=0, patience=50, verbose=1, mode=min)
+[8] Using callback: ReduceLROnPlateau(monitor=val_loss, factor=0.2, patience=20, min_delta=0.0001, cooldown=10, min_lr=1e-10, verbose=1, mode=min)
+[9] Using callback: CheckNaNWeights(params=?)
+[10] Using callback: MemoryConsumption(params=?)
+[11] Using callback: LearningCurve(params=?)
+[12] Using callback: DividerLine(params=?)

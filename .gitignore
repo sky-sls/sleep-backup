@@ -1,0 +1,6 @@
+############################
+# 1. 大数据（必须忽略）
+############################
+data/
+TinyUStaging_sky/demo/datasets/
+TinyUStaging_sky/demo/usleeptype1/data/

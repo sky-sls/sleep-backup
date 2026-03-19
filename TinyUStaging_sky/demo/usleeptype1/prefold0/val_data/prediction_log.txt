@@ -1,0 +1,858 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'predict.py'
+Args dump: 
+{'folder_regex': None, 'project_dir': './', 'data_per_prediction': None, 'channels': None, 'majority': True, 'data_split': 'val_data', 'out_dir': 'prefold0', 'num_GPUs': 1, 'strip_func': 'strip_to_match', 'num_test_time_augment': 0, 'one_shot': False, 'save_true': True, 'overwrite': True, 'force_GPU': '', 'no_argmax': False, 'weights_file_name': 'fold_0_@epoch_08_val_loss_0.92440.h5', 'continue_': False}
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'hparams.py'
+YAML path:    /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/hyperparameters/hparams.yaml
+--------------------------------------------------------------------------------
+>>> Logged by: 'init_model' in 'model_init.py'
+Creating new model of type 'UStaging4'
+--------------------------------------------------------------------------------
+>>> Logged by: '__init__' in 'ustaging4.py'
+************ sky --- ratio_se:[1, 8, 4, 1] ************ 
+************ sky --- ratio_cbam:None ************ 
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_upsample' in 'ustaging4.py'
+sky--- [Decoder(Upsample)] - cls.get_shape().as_list():  [None, 62, 1, 362]
+Attention (2) - Bottom: SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [create_dense_modeling(1*1 Conv)] - in_.get_shape().as_list():  [None, 119040, 1, 22]
+Attention (3) - Dense (after 1*1 Conv): SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'attach_attention_module' in 'attention_module.py'
+ljy -- attach_attention_module : SE
+--------------------------------------------------------------------------------
+>>> Logged by: 'create_dense_modeling' in 'ustaging4.py'
+sky--- [dense(1*1 Conv)] - cls.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv) (cropped)] - ❤ out.get_shape().as_list():  [None, 119040, 1, 7]
+sky--- [create_dense_modeling(1*1 Conv)] - in_reshaped.get_shape().as_list():  [None, 119040, 1, 2]
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'ustaging4.py'
+UStaging4 Model Summary
+-------------------
+N periods:         31
+Input dims:        3840
+N channels:        2
+N classes:         5
+Kernel size:       5
+Dilation rate:     ListWrapper([ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2]), ListWrapper([2, 2])])
+CF factor:         2.000
+Init filters:      16
+Depth:             4
+Poolings:          ListWrapper([10, 8, 6, 4])
+Transition window  1
+Dense activation   tanh
+l2 reg:            None
+Padding:           same
+Conv activation:   elu
+Receptive field:   33307
+Seq length.:       119040
+N params:          2404763
+Input:             KerasTensor(type_spec=TensorSpec(shape=(None, 31, 3840, 2), dtype=tf.float32, name='input_1'), name='input_1', description="created by layer 'input_1'")
+Output:            KerasTensor(type_spec=TensorSpec(shape=(None, 31, 5), dtype=tf.float32, name=None), name='sequence_classification_reshaped/Reshape:0', description="created by layer 'sequence_classification_reshaped'")
+--------------------------------------------------------------------------------
+>>> Logged by: 'load_from_file' in 'model_init.py'
+Loading parameters from:
+/export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/model/fold_0_@epoch_08_val_loss_0.92440.h5
+--------------------------------------------------------------------------------
+>>> Logged by: 'log' in 'abc_sleep_study_dataset.py'
+[Dataset: dcsm/VAL] SleepStudyDataset(identifier: dcsm/VAL, N pairs: 46, N loaded: 0)
+[Dataset: dcsm/VAL] Setting sample rate of 128 Hz
+[Dataset: dcsm/VAL] Setting 'strip_to_match' strip function with parameters {}...
+[Dataset: dcsm/VAL] Setting 'clip_noisy_values' quality control function with parameters {'min_max_times_global_iqr': 20}...
+[Dataset: dcsm/VAL] Setting misc dictionary: {'channel_groups': [['ECG'], ['ABD', 'THO']]}
+[Dataset: dcsm/VAL] Setting 'RobustScaler' scaler...
+--------------------------------------------------------------------------------
+>>> Logged by: 'run' in 'predict.py'
+[*] Running eval on dataset SleepStudyDataset(identifier: dcsm/VAL, N pairs: 46, N loaded: 0)
+    Out dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+
+PREDICTING ON 46 STUDIES
+[1/46] Predicting on SleepStudy: tpe21bd82f_61a1_44d4_b779_e4e9bcb572a5
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2326, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpe21bd82f_61a1_44d4_b779_e4e9bcb572a5_TRUE.npy
+* Saving array of shape (2326,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpe21bd82f_61a1_44d4_b779_e4e9bcb572a5_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2326,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpe21bd82f_61a1_44d4_b779_e4e9bcb572a5_PRED.npy
+* Saving array of shape (2326,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpe21bd82f_61a1_44d4_b779_e4e9bcb572a5_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[2/46] Predicting on SleepStudy: tpc8942e9c_e4ef_4c77_b3c2_8050b6e5a184
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2137, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpc8942e9c_e4ef_4c77_b3c2_8050b6e5a184_TRUE.npy
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpc8942e9c_e4ef_4c77_b3c2_8050b6e5a184_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpc8942e9c_e4ef_4c77_b3c2_8050b6e5a184_PRED.npy
+* Saving array of shape (2137,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpc8942e9c_e4ef_4c77_b3c2_8050b6e5a184_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[3/46] Predicting on SleepStudy: tp89c7a2b2_3072_4cde_980a_224abfc52acc
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2290, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp89c7a2b2_3072_4cde_980a_224abfc52acc_TRUE.npy
+* Saving array of shape (2290,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp89c7a2b2_3072_4cde_980a_224abfc52acc_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2290,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp89c7a2b2_3072_4cde_980a_224abfc52acc_PRED.npy
+* Saving array of shape (2290,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp89c7a2b2_3072_4cde_980a_224abfc52acc_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[4/46] Predicting on SleepStudy: tpef139af7_8d40_4223_9a37_b71892806688
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2268, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpef139af7_8d40_4223_9a37_b71892806688_TRUE.npy
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpef139af7_8d40_4223_9a37_b71892806688_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpef139af7_8d40_4223_9a37_b71892806688_PRED.npy
+* Saving array of shape (2268,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpef139af7_8d40_4223_9a37_b71892806688_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[5/46] Predicting on SleepStudy: tp0a1047c5_b734_42e2_bae7_c95c505437a3
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2333, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp0a1047c5_b734_42e2_bae7_c95c505437a3_TRUE.npy
+* Saving array of shape (2333,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp0a1047c5_b734_42e2_bae7_c95c505437a3_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2333,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp0a1047c5_b734_42e2_bae7_c95c505437a3_PRED.npy
+* Saving array of shape (2333,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp0a1047c5_b734_42e2_bae7_c95c505437a3_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[6/46] Predicting on SleepStudy: tp99448dc6_7f43_41f2_b72e_acfc78eda806
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1787, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp99448dc6_7f43_41f2_b72e_acfc78eda806_TRUE.npy
+* Saving array of shape (1787,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp99448dc6_7f43_41f2_b72e_acfc78eda806_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1787,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp99448dc6_7f43_41f2_b72e_acfc78eda806_PRED.npy
+* Saving array of shape (1787,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp99448dc6_7f43_41f2_b72e_acfc78eda806_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[7/46] Predicting on SleepStudy: tpa0c13c11_9a3b_4b47_9142_cce7304575a8
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1993, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpa0c13c11_9a3b_4b47_9142_cce7304575a8_TRUE.npy
+* Saving array of shape (1993,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpa0c13c11_9a3b_4b47_9142_cce7304575a8_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1993,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpa0c13c11_9a3b_4b47_9142_cce7304575a8_PRED.npy
+* Saving array of shape (1993,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpa0c13c11_9a3b_4b47_9142_cce7304575a8_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[8/46] Predicting on SleepStudy: tp099e5fe5_4d10_4ba4_ad89_4b0786039b0c
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2058, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp099e5fe5_4d10_4ba4_ad89_4b0786039b0c_TRUE.npy
+* Saving array of shape (2058,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp099e5fe5_4d10_4ba4_ad89_4b0786039b0c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2058,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp099e5fe5_4d10_4ba4_ad89_4b0786039b0c_PRED.npy
+* Saving array of shape (2058,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp099e5fe5_4d10_4ba4_ad89_4b0786039b0c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[9/46] Predicting on SleepStudy: tpad1f431a_6899_4940_ba37_8cc30b740182
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2232, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpad1f431a_6899_4940_ba37_8cc30b740182_TRUE.npy
+* Saving array of shape (2232,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpad1f431a_6899_4940_ba37_8cc30b740182_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2232,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpad1f431a_6899_4940_ba37_8cc30b740182_PRED.npy
+* Saving array of shape (2232,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpad1f431a_6899_4940_ba37_8cc30b740182_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[10/46] Predicting on SleepStudy: tp12a99669_d54e_4c83_8007_74ff0c27d774
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2060, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp12a99669_d54e_4c83_8007_74ff0c27d774_TRUE.npy
+* Saving array of shape (2060,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp12a99669_d54e_4c83_8007_74ff0c27d774_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2060,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp12a99669_d54e_4c83_8007_74ff0c27d774_PRED.npy
+* Saving array of shape (2060,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp12a99669_d54e_4c83_8007_74ff0c27d774_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[11/46] Predicting on SleepStudy: tpe97b0aaa_4fba_4994_a3a0_7f043e271f5e
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2338, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpe97b0aaa_4fba_4994_a3a0_7f043e271f5e_TRUE.npy
+* Saving array of shape (2338,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpe97b0aaa_4fba_4994_a3a0_7f043e271f5e_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2338,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpe97b0aaa_4fba_4994_a3a0_7f043e271f5e_PRED.npy
+* Saving array of shape (2338,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpe97b0aaa_4fba_4994_a3a0_7f043e271f5e_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[12/46] Predicting on SleepStudy: tpafc763f2_80de_4c40_8583_d241b09b2c75
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2370, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpafc763f2_80de_4c40_8583_d241b09b2c75_TRUE.npy
+* Saving array of shape (2370,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpafc763f2_80de_4c40_8583_d241b09b2c75_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2370,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpafc763f2_80de_4c40_8583_d241b09b2c75_PRED.npy
+* Saving array of shape (2370,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpafc763f2_80de_4c40_8583_d241b09b2c75_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[13/46] Predicting on SleepStudy: tpa3b99842_ddbf_4ac6_adc5_699f47a73e86
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2197, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpa3b99842_ddbf_4ac6_adc5_699f47a73e86_TRUE.npy
+* Saving array of shape (2197,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpa3b99842_ddbf_4ac6_adc5_699f47a73e86_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2197,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpa3b99842_ddbf_4ac6_adc5_699f47a73e86_PRED.npy
+* Saving array of shape (2197,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpa3b99842_ddbf_4ac6_adc5_699f47a73e86_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[14/46] Predicting on SleepStudy: tp7f6c419b_c612_40fb_8c83_1e63f5cd3f3d
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2062, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp7f6c419b_c612_40fb_8c83_1e63f5cd3f3d_TRUE.npy
+* Saving array of shape (2062,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp7f6c419b_c612_40fb_8c83_1e63f5cd3f3d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2062,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp7f6c419b_c612_40fb_8c83_1e63f5cd3f3d_PRED.npy
+* Saving array of shape (2062,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp7f6c419b_c612_40fb_8c83_1e63f5cd3f3d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[15/46] Predicting on SleepStudy: tp224c3c58_c259_4b9b_b600_25d6249dce97
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2407, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp224c3c58_c259_4b9b_b600_25d6249dce97_TRUE.npy
+* Saving array of shape (2407,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp224c3c58_c259_4b9b_b600_25d6249dce97_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2407,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp224c3c58_c259_4b9b_b600_25d6249dce97_PRED.npy
+* Saving array of shape (2407,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp224c3c58_c259_4b9b_b600_25d6249dce97_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[16/46] Predicting on SleepStudy: tp0bb80b4a_9b27_4482_aa4f_f17eca8c9c12
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2432, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp0bb80b4a_9b27_4482_aa4f_f17eca8c9c12_TRUE.npy
+* Saving array of shape (2432,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp0bb80b4a_9b27_4482_aa4f_f17eca8c9c12_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2432,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp0bb80b4a_9b27_4482_aa4f_f17eca8c9c12_PRED.npy
+* Saving array of shape (2432,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp0bb80b4a_9b27_4482_aa4f_f17eca8c9c12_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[17/46] Predicting on SleepStudy: tpe603f221_cd83_4f4b_9b51_01d71a0911a2
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2501, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpe603f221_cd83_4f4b_9b51_01d71a0911a2_TRUE.npy
+* Saving array of shape (2501,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpe603f221_cd83_4f4b_9b51_01d71a0911a2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2501,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpe603f221_cd83_4f4b_9b51_01d71a0911a2_PRED.npy
+* Saving array of shape (2501,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpe603f221_cd83_4f4b_9b51_01d71a0911a2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[18/46] Predicting on SleepStudy: tp23f63ec3_ff8a_4220_b533_1acee2049114
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2372, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp23f63ec3_ff8a_4220_b533_1acee2049114_TRUE.npy
+* Saving array of shape (2372,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp23f63ec3_ff8a_4220_b533_1acee2049114_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2372,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp23f63ec3_ff8a_4220_b533_1acee2049114_PRED.npy
+* Saving array of shape (2372,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp23f63ec3_ff8a_4220_b533_1acee2049114_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[19/46] Predicting on SleepStudy: tpefd89741_a24e_4c7b_9670_b807c078ddb9
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2308, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpefd89741_a24e_4c7b_9670_b807c078ddb9_TRUE.npy
+* Saving array of shape (2308,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpefd89741_a24e_4c7b_9670_b807c078ddb9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2308,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpefd89741_a24e_4c7b_9670_b807c078ddb9_PRED.npy
+* Saving array of shape (2308,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpefd89741_a24e_4c7b_9670_b807c078ddb9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[20/46] Predicting on SleepStudy: tpf44a1c1d_4fb5_4ba2_a4d8_6f725c0da270
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2155, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpf44a1c1d_4fb5_4ba2_a4d8_6f725c0da270_TRUE.npy
+* Saving array of shape (2155,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpf44a1c1d_4fb5_4ba2_a4d8_6f725c0da270_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2155,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpf44a1c1d_4fb5_4ba2_a4d8_6f725c0da270_PRED.npy
+* Saving array of shape (2155,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpf44a1c1d_4fb5_4ba2_a4d8_6f725c0da270_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[21/46] Predicting on SleepStudy: tpaf7a6716_759f_4b15_b77a_aad682760501
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2356, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpaf7a6716_759f_4b15_b77a_aad682760501_TRUE.npy
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+* Saving array of shape (2356,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpaf7a6716_759f_4b15_b77a_aad682760501_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[22/46] Predicting on SleepStudy: tpee1110ce_5fae_4da7_a273_3095d8b5a8da
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2285, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpee1110ce_5fae_4da7_a273_3095d8b5a8da_TRUE.npy
+* Saving array of shape (2285,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpee1110ce_5fae_4da7_a273_3095d8b5a8da_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2285,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpee1110ce_5fae_4da7_a273_3095d8b5a8da_PRED.npy
+* Saving array of shape (2285,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpee1110ce_5fae_4da7_a273_3095d8b5a8da_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[23/46] Predicting on SleepStudy: tp0b99f88c_d9fa_4a8c_b91c_1322a9e0301a
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2110, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp0b99f88c_d9fa_4a8c_b91c_1322a9e0301a_TRUE.npy
+* Saving array of shape (2110,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp0b99f88c_d9fa_4a8c_b91c_1322a9e0301a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2110,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp0b99f88c_d9fa_4a8c_b91c_1322a9e0301a_PRED.npy
+* Saving array of shape (2110,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp0b99f88c_d9fa_4a8c_b91c_1322a9e0301a_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[24/46] Predicting on SleepStudy: tpaa57b1d3_44ef_4b31_8913_d12b20a9f80f
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2316, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpaa57b1d3_44ef_4b31_8913_d12b20a9f80f_TRUE.npy
+* Saving array of shape (2316,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpaa57b1d3_44ef_4b31_8913_d12b20a9f80f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2316,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpaa57b1d3_44ef_4b31_8913_d12b20a9f80f_PRED.npy
+* Saving array of shape (2316,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpaa57b1d3_44ef_4b31_8913_d12b20a9f80f_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[25/46] Predicting on SleepStudy: tpe5b46bc8_1655_4b31_b543_3e235ccf7f45
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2389, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpe5b46bc8_1655_4b31_b543_3e235ccf7f45_TRUE.npy
+* Saving array of shape (2389,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpe5b46bc8_1655_4b31_b543_3e235ccf7f45_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2389,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpe5b46bc8_1655_4b31_b543_3e235ccf7f45_PRED.npy
+* Saving array of shape (2389,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpe5b46bc8_1655_4b31_b543_3e235ccf7f45_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[26/46] Predicting on SleepStudy: tp2511f135_adca_486f_ab5b_64a6dd3ce125
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2527, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp2511f135_adca_486f_ab5b_64a6dd3ce125_TRUE.npy
+* Saving array of shape (2527,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp2511f135_adca_486f_ab5b_64a6dd3ce125_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2527,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp2511f135_adca_486f_ab5b_64a6dd3ce125_PRED.npy
+* Saving array of shape (2527,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp2511f135_adca_486f_ab5b_64a6dd3ce125_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[27/46] Predicting on SleepStudy: tp3bff3d59_9210_4169_ad44_20f070aaa7fa
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2412, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp3bff3d59_9210_4169_ad44_20f070aaa7fa_TRUE.npy
+* Saving array of shape (2412,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp3bff3d59_9210_4169_ad44_20f070aaa7fa_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2412,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp3bff3d59_9210_4169_ad44_20f070aaa7fa_PRED.npy
+* Saving array of shape (2412,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp3bff3d59_9210_4169_ad44_20f070aaa7fa_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[28/46] Predicting on SleepStudy: tp925d2525_a0f6_4a2e_bbc7_ae091a0f2c80
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2215, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp925d2525_a0f6_4a2e_bbc7_ae091a0f2c80_TRUE.npy
+* Saving array of shape (2215,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp925d2525_a0f6_4a2e_bbc7_ae091a0f2c80_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2215,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp925d2525_a0f6_4a2e_bbc7_ae091a0f2c80_PRED.npy
+* Saving array of shape (2215,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp925d2525_a0f6_4a2e_bbc7_ae091a0f2c80_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[29/46] Predicting on SleepStudy: tpdf8612ed_eb16_41a6_91cc_da5532056413
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2344, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpdf8612ed_eb16_41a6_91cc_da5532056413_TRUE.npy
+* Saving array of shape (2344,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpdf8612ed_eb16_41a6_91cc_da5532056413_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2344,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpdf8612ed_eb16_41a6_91cc_da5532056413_PRED.npy
+* Saving array of shape (2344,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpdf8612ed_eb16_41a6_91cc_da5532056413_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[30/46] Predicting on SleepStudy: tp5f916d5e_52fb_4825_95b3_377f066295e2
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2690, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp5f916d5e_52fb_4825_95b3_377f066295e2_TRUE.npy
+* Saving array of shape (2690,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp5f916d5e_52fb_4825_95b3_377f066295e2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2690,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp5f916d5e_52fb_4825_95b3_377f066295e2_PRED.npy
+* Saving array of shape (2690,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp5f916d5e_52fb_4825_95b3_377f066295e2_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[31/46] Predicting on SleepStudy: tp63363212_458c_48e2_b190_0996c708da8d
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2130, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp63363212_458c_48e2_b190_0996c708da8d_TRUE.npy
+* Saving array of shape (2130,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp63363212_458c_48e2_b190_0996c708da8d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2130,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp63363212_458c_48e2_b190_0996c708da8d_PRED.npy
+* Saving array of shape (2130,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp63363212_458c_48e2_b190_0996c708da8d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[32/46] Predicting on SleepStudy: tp75b132f5_e436_42a4_acd7_2a936c0541b4
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2044, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp75b132f5_e436_42a4_acd7_2a936c0541b4_TRUE.npy
+* Saving array of shape (2044,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp75b132f5_e436_42a4_acd7_2a936c0541b4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2044,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp75b132f5_e436_42a4_acd7_2a936c0541b4_PRED.npy
+* Saving array of shape (2044,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp75b132f5_e436_42a4_acd7_2a936c0541b4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[33/46] Predicting on SleepStudy: tp6574c107_c5e4_409a_9796_92cc727fc0ae
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2475, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp6574c107_c5e4_409a_9796_92cc727fc0ae_TRUE.npy
+* Saving array of shape (2475,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp6574c107_c5e4_409a_9796_92cc727fc0ae_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2475,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp6574c107_c5e4_409a_9796_92cc727fc0ae_PRED.npy
+* Saving array of shape (2475,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp6574c107_c5e4_409a_9796_92cc727fc0ae_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[34/46] Predicting on SleepStudy: tp436c61a0_f651_4dd2_8573_70bf6bb3e078
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2450, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp436c61a0_f651_4dd2_8573_70bf6bb3e078_TRUE.npy
+* Saving array of shape (2450,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp436c61a0_f651_4dd2_8573_70bf6bb3e078_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2450,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp436c61a0_f651_4dd2_8573_70bf6bb3e078_PRED.npy
+* Saving array of shape (2450,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp436c61a0_f651_4dd2_8573_70bf6bb3e078_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[35/46] Predicting on SleepStudy: tp0f917eef_f6da_4027_86c3_33e78bf3cd4d
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1992, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp0f917eef_f6da_4027_86c3_33e78bf3cd4d_TRUE.npy
+* Saving array of shape (1992,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp0f917eef_f6da_4027_86c3_33e78bf3cd4d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (1992,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp0f917eef_f6da_4027_86c3_33e78bf3cd4d_PRED.npy
+* Saving array of shape (1992,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp0f917eef_f6da_4027_86c3_33e78bf3cd4d_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[36/46] Predicting on SleepStudy: tp439d1f70_b300_4eb0_9022_f3e5079757c5
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2323, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp439d1f70_b300_4eb0_9022_f3e5079757c5_TRUE.npy
+* Saving array of shape (2323,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp439d1f70_b300_4eb0_9022_f3e5079757c5_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2323,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp439d1f70_b300_4eb0_9022_f3e5079757c5_PRED.npy
+* Saving array of shape (2323,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp439d1f70_b300_4eb0_9022_f3e5079757c5_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[37/46] Predicting on SleepStudy: tp2757d5fb_a07b_4565_b95f_3c48601ebabf
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2027, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp2757d5fb_a07b_4565_b95f_3c48601ebabf_TRUE.npy
+* Saving array of shape (2027,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp2757d5fb_a07b_4565_b95f_3c48601ebabf_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2027,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp2757d5fb_a07b_4565_b95f_3c48601ebabf_PRED.npy
+* Saving array of shape (2027,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp2757d5fb_a07b_4565_b95f_3c48601ebabf_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[38/46] Predicting on SleepStudy: tp52125fb9_b4de_4e43_b95d_241af933bc46
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2239, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp52125fb9_b4de_4e43_b95d_241af933bc46_TRUE.npy
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+* Saving array of shape (2239,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp52125fb9_b4de_4e43_b95d_241af933bc46_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[39/46] Predicting on SleepStudy: tp0ae9f003_913a_46a6_8f36_73026723b046
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2410, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp0ae9f003_913a_46a6_8f36_73026723b046_TRUE.npy
+* Saving array of shape (2410,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp0ae9f003_913a_46a6_8f36_73026723b046_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2410,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp0ae9f003_913a_46a6_8f36_73026723b046_PRED.npy
+* Saving array of shape (2410,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp0ae9f003_913a_46a6_8f36_73026723b046_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[40/46] Predicting on SleepStudy: tp2042bf17_967d_4292_81f4_3d60f350bb1e
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2379, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp2042bf17_967d_4292_81f4_3d60f350bb1e_TRUE.npy
+* Saving array of shape (2379,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp2042bf17_967d_4292_81f4_3d60f350bb1e_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2379,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp2042bf17_967d_4292_81f4_3d60f350bb1e_PRED.npy
+* Saving array of shape (2379,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp2042bf17_967d_4292_81f4_3d60f350bb1e_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[41/46] Predicting on SleepStudy: tp35b30cf5_29c9_4c84_933a_1f0b6102cce4
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2260, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp35b30cf5_29c9_4c84_933a_1f0b6102cce4_TRUE.npy
+* Saving array of shape (2260,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp35b30cf5_29c9_4c84_933a_1f0b6102cce4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2260,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp35b30cf5_29c9_4c84_933a_1f0b6102cce4_PRED.npy
+* Saving array of shape (2260,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp35b30cf5_29c9_4c84_933a_1f0b6102cce4_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[42/46] Predicting on SleepStudy: tp5bca5f36_7d01_4a68_b5f3_65a7d39180a9
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2317, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp5bca5f36_7d01_4a68_b5f3_65a7d39180a9_TRUE.npy
+* Saving array of shape (2317,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp5bca5f36_7d01_4a68_b5f3_65a7d39180a9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2317,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp5bca5f36_7d01_4a68_b5f3_65a7d39180a9_PRED.npy
+* Saving array of shape (2317,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp5bca5f36_7d01_4a68_b5f3_65a7d39180a9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[43/46] Predicting on SleepStudy: tp2fbc49dd_ff99_42b3_90e8_3016734e7a0c
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2324, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp2fbc49dd_ff99_42b3_90e8_3016734e7a0c_TRUE.npy
+* Saving array of shape (2324,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp2fbc49dd_ff99_42b3_90e8_3016734e7a0c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2324,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp2fbc49dd_ff99_42b3_90e8_3016734e7a0c_PRED.npy
+* Saving array of shape (2324,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp2fbc49dd_ff99_42b3_90e8_3016734e7a0c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[44/46] Predicting on SleepStudy: tp5c607c27_6576_451f_98a4_b7506efa8d3c
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2088, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp5c607c27_6576_451f_98a4_b7506efa8d3c_TRUE.npy
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp5c607c27_6576_451f_98a4_b7506efa8d3c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp5c607c27_6576_451f_98a4_b7506efa8d3c_PRED.npy
+* Saving array of shape (2088,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp5c607c27_6576_451f_98a4_b7506efa8d3c_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[45/46] Predicting on SleepStudy: tp1599a50d_347a_499b_9668_470f922efcf9
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2312, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tp1599a50d_347a_499b_9668_470f922efcf9_TRUE.npy
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+* Saving array of shape (2312,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tp1599a50d_347a_499b_9668_470f922efcf9_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred' in 'predict.py'
+[46/46] Predicting on SleepStudy: tpf0a7e365_5ed8_4d2c_9a57_0f9bfdc2fb10
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'ABD')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2351, 1) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/tpf0a7e365_5ed8_4d2c_9a57_0f9bfdc2fb10_TRUE.npy
+* Saving array of shape (2351,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+ABD/tpf0a7e365_5ed8_4d2c_9a57_0f9bfdc2fb10_PRED.npy
+--------------------------------------------------------------------------------
+>>> Logged by: 'run_pred_on_pair' in 'predict.py'
+ -- Channels: ('ECG', 'THO')
+--------------------------------------------------------------------------------
+>>> Logged by: 'save_file' in 'predict.py'
+* Saving array of shape (2351,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/ECG+THO/tpf0a7e365_5ed8_4d2c_9a57_0f9bfdc2fb10_PRED.npy
+* Saving array of shape (2351,) to /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/prefold0/val_data/dcsm/majority/tpf0a7e365_5ed8_4d2c_9a57_0f9bfdc2fb10_PRED.npy

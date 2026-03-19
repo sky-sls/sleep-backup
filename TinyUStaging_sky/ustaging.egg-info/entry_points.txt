@@ -1,0 +1,3 @@
+[console_scripts]
+sky = ustaging.bin.us:entry_func
+
