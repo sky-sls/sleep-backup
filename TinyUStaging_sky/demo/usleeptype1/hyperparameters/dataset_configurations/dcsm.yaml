@@ -20,21 +20,21 @@
 #   hyp_regex: .*[.]ids
 
 train_data:
-  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_6/train
+  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_9/train
   period_length_sec: 30
   identifier: "TRAIN"
   psg_regex: .*[.]h5
   hyp_regex: .*[.]ids
 
 val_data:
-  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_6/val
+  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_9/val
   period_length_sec: 30
   identifier: "VAL"
   psg_regex: .*[.]h5
   hyp_regex: .*[.]ids
 
 test_data:
-  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_6/test
+  data_dir: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/datasets/processed_SKY/dcsm/views/10_CV/split_9/test
   period_length_sec: 30
   identifier: "TEST"
   psg_regex: .*[.]h5
