@@ -371,71 +371,30 @@ class GlobalGaussianNoise(Augmenter):
         return x+noise, y
 
 
-#sky0323
 class ChannelDropout(Augmenter):
     """
     Drops whole channels at random with a certain probability, replacing
     all values in the channel with low sigma Gaussian noise.
-
-    Safe behavior:
-    - If x has <= 1 channel, skip augmentation.
-    - Always keep at least 1 channel alive.
     """
     def __init__(self, drop_fraction, apply_prob, aug_weight=0.5):
         self.__name__ = "ChannelDropout"
         super().__init__(self.drop_channels, apply_prob, aug_weight)
-        self.drop_fraction = float(drop_fraction)
+        self.drop_fraction = drop_fraction
 
     def drop_channels(self, x, y):
         n_channels = x.shape[-1]
-
-        # 单通道或非法情况：直接跳过
-        if n_channels is None or n_channels <= 1:
-            return x, y
-
-        # 至少drop 1个，但绝不能把所有通道都drop掉
         n_to_drop = max(int(n_channels * self.drop_fraction), 1)
-        n_to_drop = min(n_to_drop, n_channels - 1)
-
-        # 保险保护
-        if n_to_drop <= 0:
-            return x, y
-
-        to_drop = np.random.choice(np.arange(n_channels), n_to_drop, replace=False)
-
+        if n_to_drop >= n_channels:
+            raise ValueError("Attempted to drop {} channels from 'x' with {}"
+                             " channels (shape {})".format(n_to_drop,
+                                                           n_channels,
+                                                           x.shape))
+        to_drop = np.random.choice(np.arange(n_channels), n_to_drop, False)
         for i in to_drop:
-            x[..., i] = np.random.normal(
-                loc=np.mean(x[..., i]),
-                scale=0.01,
-                size=x.shape[:-1]
-            )
-
+            x[..., i] = np.random.normal(loc=np.mean(x[..., i]),
+                                         scale=0.01,
+                                         size=x.shape[:-1])
         return x, y
-
-# class ChannelDropout(Augmenter):
-#     """
-#     Drops whole channels at random with a certain probability, replacing
-#     all values in the channel with low sigma Gaussian noise.
-#     """
-#     def __init__(self, drop_fraction, apply_prob, aug_weight=0.5):
-#         self.__name__ = "ChannelDropout"
-#         super().__init__(self.drop_channels, apply_prob, aug_weight)
-#         self.drop_fraction = drop_fraction
-
-#     def drop_channels(self, x, y):
-#         n_channels = x.shape[-1]
-#         n_to_drop = max(int(n_channels * self.drop_fraction), 1)
-#         if n_to_drop >= n_channels:
-#             raise ValueError("Attempted to drop {} channels from 'x' with {}"
-#                              " channels (shape {})".format(n_to_drop,
-#                                                            n_channels,
-#                                                            x.shape))
-#         to_drop = np.random.choice(np.arange(n_channels), n_to_drop, False)
-#         for i in to_drop:
-#             x[..., i] = np.random.normal(loc=np.mean(x[..., i]),
-#                                          scale=0.01,
-#                                          size=x.shape[:-1])
-#         return x, y
 
 
 class RegionalGaussianNoise(RegionalAugmenter):
