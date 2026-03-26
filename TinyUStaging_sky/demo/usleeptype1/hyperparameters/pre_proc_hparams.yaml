@@ -37,7 +37,7 @@ __CB_reduce_lr: &REDUCE_LR
 __CB_tb: &TB
   nickname: "tb"
   class_name: "TensorBoard"
-  kwargs: {log_dir: './tensorboard/fold_9'}
+  kwargs: {log_dir: './tensorboard/fold_8'}
 
 __CB_es: &ES
   # Early stopping
@@ -56,7 +56,7 @@ __CB_es: &ES
 __CB_mcp_clean: &MCP_CLEAN
   nickname: "mcp_clean"
   class_name: "ModelCheckPointClean"
-  kwargs: {filepath: "./model/fold_9_@epoch_{epoch:02d}_val_dice_{val_dice:.5f}.h5",
+  kwargs: {filepath: "./model/fold_8_@epoch_{epoch:02d}_val_dice_{val_dice:.5f}.h5",
            monitor: "val_dice", save_best_only: true, save_weights_only: true,
            verbose: 1, mode: "max"}
 
@@ -98,7 +98,7 @@ __CB_timer: &TIMER
 __CB_csv: &CSV
   nickname: "csv"
   class_name: "CSVLogger"
-  kwargs: {filename: "logs/fold_9_training.csv", separator: ",", append: true}
+  kwargs: {filename: "logs/fold_8_training.csv", separator: ",", append: true}
 
 
 
@@ -129,7 +129,7 @@ build:
   transition_window: 5 #最终 31 个 epoch 标签预测时，每个位置能看到多大范围的邻近 epoch 上下文
   complexity_factor: 2
   n_classes: 5
-  batch_shape: [32, 31, 3840, 2]
+  batch_shape: [32, 31, 3840, 1]
 
 
 augmenters:
