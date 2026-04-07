@@ -1,13 +1,13 @@
 train_data:
-  data_dir: data/fold_8/processed_data.h5
+  data_dir: data/fold_6/processed_data.h5
   period_length_sec: 30
   identifier: TRAIN
 
 val_data:
-  data_dir: data/fold_8/processed_data.h5
+  data_dir: data/fold_6/processed_data.h5
   period_length_sec: 30
   identifier: VAL
 
 access_time_channel_sampling_groups:
   - ['ECG']
-  # - ['ABD', 'THO']
+  - ['ABD', 'THO']

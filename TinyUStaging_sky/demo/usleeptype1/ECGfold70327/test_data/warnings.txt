@@ -1,0 +1,5 @@
+Log for model in: /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky/demo/usleeptype1/ECGfold70327/test_data
+[WARNING] Path /export/SHELAB/sikaiyue/sleep/TinyUStaging_sky does not contain a Git repository, or Git is not installed on this system.
+-- The software verison match could not be varified against the hyperparameter file.
+-- Software version will not be added to the hyperparameter file.
+[WARNING] Quality control for sample 'tp439d1f70_b300_4eb0_9022_f3e5079757c5' affected 3/2323 epochs in channel 1
