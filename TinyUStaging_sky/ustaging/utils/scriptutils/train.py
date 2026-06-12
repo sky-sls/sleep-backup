@@ -218,15 +218,19 @@ def get_generators(train_datasets_queues, hparams, val_dataset_queues=None):
                                  get_batch_sequence)
 
     n_classes = hparams.get_from_anywhere('n_classes')
+    use_domain = hparams.get_from_anywhere('use_domain_adversarial', False)
+    
     train_seqs = [get_batch_sequence(dataset_queue=d,
                                      random_batches=True,
                                      n_classes=n_classes,
                                      augmenters=hparams.get("augmenters"),
+                                     use_domain_label=use_domain,
                                      **hparams["fit"]) for d in train_datasets_queues]
     val_seq = None
     if val_dataset_queues:
         val_seq = [get_batch_sequence(dataset_queue=d,
                                       n_classes=n_classes,
+                                      use_domain_label=use_domain,
                                       **hparams['fit']) for d in val_dataset_queues]
     if len(train_seqs) > 1:
         # Wrap sequencers in MultiSequence object which creates batches by sampling

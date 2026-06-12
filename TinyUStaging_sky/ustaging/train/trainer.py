@@ -272,9 +272,28 @@ class Trainer(object):
         if cb:
             cb.org_model = self.org_model
 
+        # 检查是否是域对抗模式（双标签/双输出）
+        # 获取一个样本看看
+        is_domain_adversarial = False
+        try:
+            sample = train[0]
+            if len(sample) == 2 and isinstance(sample[1], tuple):
+                is_domain_adversarial = True
+                self.logger("[Domain Adversarial] Detected two-label format (sleep + domain)")
+        except Exception as e:
+            self.logger(f"[Domain Adversarial] Check failed: {e}")
+
         # Temporary memory leak fix
         import tensorflow as tf
-        dtypes, shapes = list(zip(*map(lambda x: (x.dtype, x.shape), train[0])))
+        if is_domain_adversarial:
+            # 域对抗模式：双标签 (sleep_labels, domain_labels)
+            X_sample, (y1, y2) = train[0]
+            dtypes = (tf.float32, (tf.int32, tf.int32))
+            shapes = (X_sample.shape, (y1.shape, y2.shape))
+        else:
+            # 原始单标签模式
+            dtypes, shapes = list(zip(*map(lambda x: (x.dtype, x.shape), train[0])))
+        
         train = tf.data.Dataset.from_generator(train, dtypes, shapes)
 
         # Fit the model

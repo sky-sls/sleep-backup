@@ -114,27 +114,32 @@ datasets: # preprocessed对应55_tiny
 
 
 build:
-  #
-  # Hyperparameters passed to the Model.build and __init__ methods
-  #
-  model_class_name: "UStaging4"
-  attention_module_encoder : "SE"
-  attention_module_encoder_layer : 3
-  attention_module_bottom : "SE"
-  attention_module_dense : "SE"
-  attention_module_seq : "SE"
-  # attention_module_bottom: "SE"
-  # attention_module_dense: "SE"
-  ratio_se: [1, 8, 4, 1] 
-  activation: elu
-  depth: 4
-  pools: [10, 8, 6, 4]
-  kernel_size: 5
-  dilation: 2
-  transition_window: 5 #最终 31 个 epoch 标签预测时，每个位置能看到多大范围的邻近 epoch 上下文
-  complexity_factor: 2
-  n_classes: 5
-  batch_shape: [32, 31, 3840, 2]
+    #
+    # Hyperparameters passed to the Model.build and __init__ methods
+    #
+    model_class_name: "DafmSleepNet"
+    attention_module_encoder: "SE"
+    attention_module_encoder_layer: 3
+    attention_module_bottom: "SE"
+    attention_module_dense: "SE"
+    attention_module_seq: "SE"
+    # attention_module_bottom: "SE"
+    # attention_module_dense: "SE"
+    ratio_se: [1, 8, 4, 1]
+    activation: elu
+    depth: 4
+    pools: [10, 8, 6, 4]
+    kernel_size: 5
+    dilation: 2
+    transition_window: 5 #最终 31 个 epoch 标签预测时，每个位置能看到多大范围的邻近 epoch
+    complexity_factor: 2
+    n_classes: 5
+    batch_shape: [32, 11, 3840, 2]
+    # 域对抗学习相关参数
+    use_domain_adversarial: false  # 设置为 true 启用域对抗学习
+    n_domains: 10  # 域的数量（受试者数量）
+    lambda_val: 1.0  # 梯度反转层的 lambda 系数
+    domain_hidden_units: 256  # 域分类器隐藏层单元数
 
 
 augmenters:
@@ -200,7 +205,7 @@ fit:
 
   use_multiprocessing: False
   channel_mixture: False
-  margin: 15
+  margin: 5   #15
   metrics: ["sparse_categorical_accuracy"]
   
   

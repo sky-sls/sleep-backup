@@ -82,6 +82,7 @@ class BatchSequence(BaseSequence):
                  scale_assertion=True,
                  require_all_loaded=True,
                  identifier="",
+                 use_domain_label=False,
                  **kwargs):
         """
         Args:
@@ -104,6 +105,7 @@ class BatchSequence(BaseSequence):
             logger:            (Logger) A Logger object
             no_log:            (bool)   Do not log information on this Sequence
             identifier:        (string) A string identifier name
+            use_domain_label:  (bool)   Whether to include domain labels (subject IDs)
         """
         self._inferred = n_classes is None
         n_classes = _infer_n_classes(n_classes, dataset_queue)
@@ -120,6 +122,14 @@ class BatchSequence(BaseSequence):
         self._cum_periods_per_pair_minus_margins = None  # Set in margin setter
         self.margin = margin
         self.data_per_period = data_per_period
+        
+        # 域标签相关
+        self.use_domain_label = use_domain_label
+        self.study_to_domain = {}
+        if self.use_domain_label and require_all_loaded:
+            # 初始化 study 到域 ID 的映射
+            for i, study in enumerate(self.dataset_queue):
+                self.study_to_domain[study.identifier] = i
 
         if scale_assertion:
             try:
@@ -395,7 +405,13 @@ class BatchSequence(BaseSequence):
             X_, y_ = self.get_period(sleep_study, period_idx,
                                      allow_shift_at_border=False)
             X.append(X_), y.append(y_)
-        return X, y
+        
+        domain_id = None
+        if self.use_domain_label:
+            # 获取域标签
+            domain_id = self.study_to_domain.get(sleep_study.identifier, 0)
+        
+        return X, y, domain_id
 
     @requires_all_loaded
     def get_batch(self, batch_idx):
@@ -416,8 +432,14 @@ class BatchSequence(BaseSequence):
             y: A batch of label values, ndarray of shape
                [batch_size, margin*2+1, 1] if margin, else
                [batch_size, 1]
+            y_domain: (Optional) Domain/subject labels, only returned if use_domain_label=True
         """
         X, y = self.get_empty_batch_arrays()
+        
+        # 域标签数组
+        y_domain = None
+        if self.use_domain_label:
+            y_domain = []
 
         # batch_idx is the batch number. We first find the total period index
         # at which we should start sampling
@@ -442,11 +464,13 @@ class BatchSequence(BaseSequence):
             local_period_end -= periods_in_next_ss
 
             # Get all periods in the current SS
-            xx, yy = self._get_periods_in_range(sleep_study,
-                                                local_period_start,
-                                                local_period_end)
+            xx, yy, dom_id = self._get_periods_in_range(sleep_study,
+                                                     local_period_start,
+                                                     local_period_end)
             X[len(xx)] = xx
             y[len(yy)] = yy
+            if self.use_domain_label:
+                y_domain.extend([dom_id] * len(xx))
 
         if periods_in_next_ss and len(self.dataset_queue) > study_idx + 1:
             with self.dataset_queue.get_study_by_idx(study_idx + 1) as next_sleep_study:
@@ -454,8 +478,19 @@ class BatchSequence(BaseSequence):
                     raise NotImplementedError("Batch spans three SleepPairs. "
                                               "Handling this situation is not "
                                               "yet implemented.")
-                xx, yy = self._get_periods_in_range(sleep_study, self.margin,
-                                                    self.margin+periods_in_next_ss)
+                xx, yy, dom_id = self._get_periods_in_range(next_sleep_study,
+                                                         self.margin,
+                                                         self.margin+periods_in_next_ss)
                 X[-periods_in_next_ss:] = xx
                 y[-periods_in_next_ss:] = yy
-        return self.process_batch(X, y)
+                if self.use_domain_label:
+                    y_domain.extend([dom_id] * len(xx))
+        
+        X, y = self.process_batch(X, y)
+        if self.use_domain_label:
+            # 处理域标签
+            y_domain = np.array(y_domain, dtype=np.int32).reshape(-1, 1)
+            # 返回 (X, (y_sleep, y_domain)) 格式
+            return X, (y, y_domain)
+        
+        return X, y

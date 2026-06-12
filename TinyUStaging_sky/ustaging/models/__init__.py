@@ -6,4 +6,5 @@ from .ustaging import UStaging
 from .ustaging2 import UStaging2
 from .ustaging3 import UStaging3
 from .ustaging4 import UStaging4
+from .dafmsleepnet import DafmSleepNet
 from .attention_module import *
